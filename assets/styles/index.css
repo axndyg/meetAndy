@@ -174,9 +174,11 @@ button a {
     filter: brightness(0) invert(1);
 }
 
-/* Email icon - show without filter (assuming PNG is already white/transparent) */
+/* Email icon - black circle with white logo: invert to white circle, then brighten logo */
 button a img[src*="email-icon"] {
-    filter: none;
+    width: 20px;
+    height: 20px;
+    filter: invert(1) brightness(1.8) contrast(1.2);
     opacity: 0.7;
 }
 
