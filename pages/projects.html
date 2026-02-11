@@ -3,97 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>projects</title>
+    <title>projects | andres r. gutierrez</title>
     <link rel="stylesheet" href="../assets/styles/index.css">
     <link rel="stylesheet" href="../assets/styles/folder.css">
     <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
     <script src="../assets/scripts/tabs.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="cabinet">
-            <div class="tabs">
-                <button class="tab-link active" onclick="openFolder(event, 'proj1')">SPA</button>
-                <button class="tab-link" onclick="openFolder(event, 'proj2')">UEFA</button>
-                <button class="tab-link" onclick="openFolder(event, 'proj3')">More </button>
+    <div class="container project-dashboard">
+        
+        <aside class="project-sidebar">
+            <div class="sidebar-header">directory</div>
+            <nav class="sidebar-nav">
+                <button class="tab-link active" onclick="openFolder(event, 'proj1')">llm fine-tuning</button>
+                <button class="tab-link" onclick="openFolder(event, 'proj2')">speech accent detection</button>
+                <button class="tab-link" onclick="openFolder(event, 'proj3')">uefa match predictor</button>
+                <button class="tab-link" onclick="openFolder(event, 'proj4')">more to come!</button>
+            </nav>
+            <div class="sidebar-buffer">
+    
             </div>
+        </aside>
+        <main class="project-display">
             <div id="proj1" class="folder-content active-folder">
-                <div class="fc-main">
-                    <div class="project-header">
-                        <img src="../assets/images/icon/projects/spa.png" alt="spa logo" class="project-logo">
+                <div class="project-header-row">
+                    <div class="project-title-group">
+                        <img src="../assets/images/icon/projects/qwen.png" class="project-logo" alt="qwen Logo">
+                        <h3>Fine-tuned MCQ Qwen-Instruct</h3>
+                    </div>
+
+                </div>
+
+                <div class="project-specs">
+                    <span>LM Supervised Fine-tuning</span>
+                    <span class="date-tag">Nov 2025 — Dec 2025</span>
+                </div>
+
+                <p class="project-description">
+                    Optimized a Qwen2.5-0.5B model for machine learning reasoning via Supervised Fine-Tuning (SFT). Developed a high-signal dataset of 985 samples using synthetic and curated sources, resulting in a 1st place finish (57.6% accuracy) in a competitive cohort of 417 students.
+                </p>
+                <div class="project-links">
+                    <span class="label">Leaderboard:</span>
+                    <a href="https://www.kaggle.com/competitions/beta-test" target="_blank" class="archive-link">CS189-HW5 (LLM SFT)</a>
+                </div>
+
+                <div class="project-tags">
+                    <span class="sk">PyTorch</span>
+                    <span class="sk">NLP</span>
+                    <span class="sk">Hugging Face</span>
+                    <span class="sk">Data Curation</span>
+                    <span class="sk">SFT</span>
+                </div>
+            </div>
+            <div id="proj2" class="folder-content">
+                <div class="project-header-row">
+                    <div class="project-title-group">
+                        <img src="../assets/images/icon/projects/spa.png" class="project-logo" alt="SPA Logo">
                         <h3>Speech Accent Detection</h3>
                     </div>
-                    
-                    <div class="project-meta">
-                        <span class="subtitle">Spectrogram CNN Classification</span>
-                        <span class="date">Nov 2025 — Dec 2025</span>
-                    </div>
-                    <p class="project-description">
-                        Engineered a pipeline to transform raw audio into STFT Spectrograms for "accent image" classification. 
-                        Using a custom 400k-parameter <strong>ResNet</strong>, I stabilized training to achieve 62% accuracy in identifying 
-                        L1 language families—priming ASR systems for more inclusive recognition.
-                        <br><br>
-                        Dataset: <a href="https://accent.gmu.edu/" target="_blank" class="archive-link">The Speech Accent Archive (GMU)</a>
-                    </p>
+                    <button class="live-btn">
+                        <a href="https://drive.google.com/drive/folders/1kSyPX5qJhLXyKJfwP4o9AYHG2kfF3ydL?usp=sharing" target="_blank">
+                            <img src="../assets/images/icon/code-icon.png" class="button-icon" alt="live link">live
+                        </a>
+                    </button>
                 </div>
-                
-                <div class="right fc-sup">
-                    <div class="source">
-                        <button><a href="https://drive.google.com/drive/folders/1kSyPX5qJhLXyKJfwP4o9AYHG2kfF3ydL?usp=sharing" target="_blank"><img src="../assets/images/icon/code-icon.png" alt="code icon" class="button-icon">live</a></button>
-                    </div>
-                    <div class="tools">
-                        <span class="sk" id="sk-1">PyTorch</span> 
-                        <span class="sk" id="sk-2">ResNet-18</span>  
-                        <span class="sk" id="sk-3">STFT</span> 
-                        <span class="sk" id="sk-4">Natural Language Procressing</span>
-                        <span class="sk" id="sk-5">Feature Engineering</span>
-                        <span class="sk" id="sk-6">Extract, Transform, Load</span>
-                    </div>
+
+                <div class="project-specs">
+                    <span>Spectrogram CNN Classification</span>
+                    <span class="date-tag">Nov 2025 — Dec 2025</span>
+                </div>
+
+                <p class="project-description">
+                    Engineered a pipeline to transform raw audio into STFT Spectrograms for "accent image" classification. 
+                    Using a custom 400k-parameter <strong>ResNet</strong>, I stabilized training to achieve 62% accuracy in identifying 
+                    L1 language families—priming ASR systems for more inclusive recognition.
+                </p>
+                <div class="project-links">
+                    <span class="label">Dataset:</span>
+                    <a href="https://accent.gmu.edu/" target="_blank" class="archive-link">The Speech Accent Archive (GMU)</a>
+                </div>
+
+                <div class="project-tags">
+                    <span class="sk">pytorch</span>
+                    <span class="sk">resnet-18</span>
+                    <span class="sk">stft</span>
+                    <span class="sk">nlp</span>
+                    <span class="sk">etl</span>
                 </div>
             </div>
 
-            <div id="proj2" class="folder-content">
-                <div class="fc-main">
-                    <div class="project-header">
-                        <img src="../assets/images/icon/projects/uefa.png" alt="spa logo" class="project-logo" id="uefa">
+            <div id="proj3" class="folder-content">
+                <div class="project-header-row">
+                    <div class="project-title-group">
+                        <img src="../assets/images/icon/projects/uefa.svg" class="project-logo" id="uefa" alt="UEFA Logo">
                         <h3>UEFA Euro's Match Predictor</h3>
                     </div>
-                    <div class="project-meta">
-                        <span class="subtitle">Historical Match Trend Analysis</span>
-                        <span class="date">May 2024 - June 2024</span>
-                    </div>
-                    <p class="project-description">
-                        Developed an end-to-end ML pipeline to forecast UEFA Euro 2024 outcomes. 
-                        By programmatically scraping 60+ years of match data via <strong>BeautifulSoup</strong>, 
-                        I trained a <strong>Random Forest Classifier</strong> that successfully predicted 
-                        Spain as the tournament champion—demonstrating proficiency in automated data acquisition and predictive modeling.
-                        <br><br>
-                        Dataset: <a href="https://terrikon.com/en/" target="_blank" class="archive-link">Terrikon Football Database</a>
-                    </p>
+                    <button class="live-btn">
+                        <a href="https://github.com/axndyg/euros-WebScraping/" target="_blank">
+                            <img src="../assets/images/icon/code-icon.png" class="button-icon">live
+                        </a>
+                    </button>
                 </div>
-                
-                <div class="right fc-sup">
-                    <div class="source">
-                        <button><a href="https://github.com/axndyg/euros-WebScraping/" target="_blank"><img src="../assets/images/icon/code-icon.png" alt="code icon" class="button-icon">live</a></button>
-                    </div>
-                    <div class="tools">
-                        <span class="sk" id="sk-1">Ensemble Learning</span> 
-                        <span class="sk" id="sk-2">Data Pipeline Engineering</span>  
-                        <span class="sk" id="sk-3">Feature Encoding</span> 
-                        <span class="sk" id="sk-4">Web Scraping</span> 
-                    </div>
+
+                <div class="project-specs">
+                    <span>Historical Match Trend Analysis</span>
+                    <span class="date-tag">May 2024 - June 2024</span>
                 </div>
-            </div>
-            <div id="proj3" class="folder-content">
-                <div class="fc-main">
-                    More to come!
+
+                <p class="project-description">
+                    Developed an end-to-end ML pipeline to forecast UEFA Euro 2024 outcomes. 
+                    By programmatically scraping 60+ years of match data via <strong>BeautifulSoup</strong>, 
+                    I trained a <strong>Random Forest Classifier</strong> that successfully predicted 
+                    Spain as the tournament champion.
+                </p>
+                <div class="project-links">
+                    <span class="label">Dataset:</span>
+                    <a href="https://terrikon.com/en/" target="_blank" class="archive-link">Terrikon Football & Sport</a>
                 </div>
-                <div class="right fc-sup">
-              
+                <div class="project-tags">
+                    <span class="sk">ensemble learning</span>
+                    <span class="sk">web scraping</span>
+                    <span class="sk">feature encoding</span>
                 </div>
             </div>
-        </div>
+
+        </main>
     </div>
+
     <nav class="footer" aria-label="Main navigation">
         <ul>
             <li><a href="../index.html">main card</a></li>

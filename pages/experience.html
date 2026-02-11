@@ -5,11 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>experience</title>
     <link rel="stylesheet" href="../assets/styles/index.css">
+    <link rel="stylesheet" href="../assets/styles/folder.css">
     <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+    <script src="../assets/scripts/tabs.js"></script>
 </head>
 <body>
-    <div class="container">
-        <p class="placeholder">Experience — coming soon.</p>
+    <div class="container project-dashboard">
+        
+        <aside class="project-sidebar">
+            <div class="sidebar-header">directory</div>
+            <nav class="sidebar-nav">
+                <button class="tab-link active" onclick="openFolder(event, 'proj1')">teaching</button>
+                <button class="tab-link" onclick="openFolder(event, 'proj2')">more to write about soon!</button>
+            </nav>
+            <div class="sidebar-buffer">
+    
+            </div>
+        </aside>
+        <main class="project-display">
+            <div id="proj1" class="folder-content active-folder">
+                <div class="project-header-row">
+                    <div class="project-title-group">
+                        <h3>Undergraduate Student Instructor</h3>
+                    </div>
+
+                </div>
+
+                <div class="project-specs">
+                    <span>U.C. Berkeley</span>
+                    <span class="date-tag">Aug 2025 — Dec 2025</span>
+                </div>
+
+                <p class="project-description">
+                    To be filled in
+
+                </div>
+            </div>
+
+        </main>
     </div>
     <nav class="footer" aria-label="Main navigation">
         <ul>
