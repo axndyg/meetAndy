@@ -1,0 +1,16 @@
+/* Force the map paths to ignore parent opacity filters */
+.jvm-region {
+    transition: fill 0.3s ease;
+}
+
+/* Ensure the map container isn't clipping or dimming the content */
+#map {
+    background: transparent !important;
+    overflow: visible !important;
+}
+
+/* This targets the specific 'selected' class the JS library adds */
+.jvm-region.jvm-element[data-code].jvm-selected {
+    fill: #558071 !important; /* Force your accent green */
+    fill-opacity: 1 !important;
+}
