@@ -1,0 +1,108 @@
+.container { 
+    height: 600px;
+}
+
+
+
+
+.project-display, .project-sidebar { 
+    height: 100%;
+    overflow-y: visible;
+}
+
+.folder-content, .active-folder {
+    border: none;
+    background: none;
+    padding: 0;
+
+} 
+
+/* 1. Make the showcase container fill the height and act as a flex column */
+.showcase { 
+    display: flex;
+    flex-direction: column;
+    height: auto; /* Fills the .folder-content / .project-display height */
+ /* Prevents the whole container from growing */
+    gap: 15px;
+    
+}
+
+/* 2. Make only the body scrollable */
+.showcase-body {
+    flex: 1;           /* Takes up all remaining space below the header */
+    overflow-y: auto;  /* Enables the vertical scroll */
+    padding-right: 10px; /* Adds space so the scrollbar doesn't overlap content */
+    
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 3. Keep the header from shrinking */
+    .showcase-header {
+        flex-shrink: 0;
+        display: flex; 
+        flex-direction: row;
+        justify-content: space-between;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .showcase-memo { 
+        font-weight: lighter;
+        font-size:medium
+    }
+
+    .showcase-item { 
+        display: flex;
+        
+        margin: 10px 0;
+    }
+
+    .showcase-item-content { 
+        flex: 1;
+
+        padding-left: 8px;
+    }
+
+    .logo-up {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 5px;
+        width: 100px;
+    }
+    
+    .logo-up img { 
+        margin: 0px ;
+        max-height: 80px;
+        max-width: 80px;
+    }
+
+.showcase-footer { 
+    margin-top: auto;
+    height: 70px;
+    background: linear-gradient(to top, rgb(27, 29, 31), transparent);
+    overflow-x: visible !important;
+    margin-left: -30px;
+    margin-right: -30px;
+}
+
+
+
+#map  {
+    width: auto; 
+    height: 200px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    margin-right:10px;
+    margin-bottom: 10px;
+
+}
+
+/* In showcase.css */
+.showcase-body {
+    flex: 1; 
+    overflow-y: auto; /* This is now the only scrollbar */
+    padding-right: 10px; 
+}

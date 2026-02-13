@@ -6,42 +6,127 @@
     <title>slices of life</title>
     <link rel="stylesheet" href="../assets/styles/index.css">
     <link rel="stylesheet" href="../assets/styles/folder.css">
-    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
-    <script src="../assets/scripts/tabs.js"></script>
+    <link rel="stylesheet" href="../assets/styles/map.css">
+    <link rel="stylesheet" href="../assets/styles/showcase.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap/dist/css/jsvectormap.min.css" />
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+   
+    <script src="../assets/scripts/tabs.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/jsvectormap"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsvectormap/dist/maps/world.js"></script>
-    <link rel="stylesheet" href="../assets/styles/map.css">
+
     <script src="../assets/scripts/maps.js"></script>
-
-
-
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="main.js"></script>
 
 </head>
 <body>
     <div class="container project-dashboard">
         
         <aside class="project-sidebar">
-            <div class="sidebar-header">directory</div>
+            <div class="sidebar-header">Journal</div>
             <nav class="sidebar-nav">
-                <button class="tab-link active" onclick="openFolder(event, 'proj1')">travel</button>
-                <button class="tab-link" onclick="openFolder(event, 'proj2')">readings</button>
-                <button class="tab-link" onclick="openFolder(event, 'proj3')">movies</button>
-                <button class="tab-link" onclick="openFolder(event, 'proj4')">more to write about soon!</button>
+                <button class="tab-link active" onclick="openFolder(event, 'sol1')">travel</button>
+                <button class="tab-link" onclick="openFolder(event, 'sol2')">readings</button>
+                <button class="tab-link" onclick="openFolder(event, 'sol3')">movies</button>
+                <button class="tab-link" onclick="openFolder(event, 'sol4')">television</button>
+                <button class="tab-link" onclick="openFolder(event, 'sol5')">music</button>
             </nav>
             <div class="sidebar-buffer">
     
             </div>
         </aside>
         <main class="project-display">
-            <div id="proj1" class="folder-content active-folder">
-                    Countries I've visited (+ San Marino & Vatican City)!
-                    <div id="map" style="width: 100%; height: 400px;"></div>
+            <div id="sol1" class="folder-content  active-folder">
+                <div class="showcase">
+                    <div class="showcase-header">
+                        <h3>my travels</h3>
+                        <span>holding</span>
+                        
+                    </div>
+                    <div class="showcase-body">
+                        <div class="showcase-memo">
+                            <p>
+                                Since I first visited Italy with my family back in the Summer of 2022, I've gotten a
+                                a bit of a bug when it comes to travel. Europe is sort of the gateway drug and a study abroad
+                                in Florence shows I hope to do more.
+                            </p>
+                            <p>
+                                Traveling, as much as its relaxtion in its own form, I take it as an opportunity 
+                                to live in the culture. 
+                            </p>
+                            <p>
+                                Below is a map of countries I've been to—along with San Marino and Vatican City. 
+                                I hope I'm blessed enough to fill out more.
+                            </p>
+                        </div>
+                        <div id="map"></div>
+                        <div class="the-showcase">
+                            <div class="showcase-item the-current">
+                                <div class="logo-up">
+                                    <img src="../assets/images/icon/sol/spain.png" alt="spain logo">
+                                </div>
+                                <div class="showcase-item-content">
+                                    <bold>Next: Sevilla to Porto </bold>
+                                    <p>
+                                        Last Spring Break was a bit calm in Sacramento. 
+                                        I'm making a trip out this time around to see south Spain
+                                        and a bit of Portugal!
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="showcase-item the-favorite">
+                                <div class="logo-up">
+                                    <img src="../assets/images/icon/sol/aulani.png" alt="aulani logo">
+                                </div>
+                                <div class="showcase-item-content">
+                                    <bold>Latest: Oahu, Hawai'i</bold>
+                                    <p>
+                                        Our family is big on all things Disney. Naturally
+                                        we spent a bit of time at Aulani.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="showcase-item the-favorite">
+                                <div class="logo-up">
+                                    <img src="../assets/images/icon/sol/florence.png" alt="florence logo">
+                                </div>
+                                <div class="showcase-item-content">
+                                    <bold>Favorite: Florence Study Abroad</bold>
+                                    <p>
+                                        I had three awesome months abroad in Florence 
+                                        for my last semester in comunity college. <i>La Doce Vita</i>
+                                        as they say.
+                                    </p>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
 
-                    My next trip I plan to head to Sevilla and loop through Portugal 
-                    to end up in Porto!
+                </div>
             </div>
-
+            <div id="sol2" class="folder-content">
+                reading . . .
+            </div>
+            <div id="sol3" class="folder-content">
+                watching . . .
+            </div>
+            <div id="sol4" class="folder-content">
+                watching . . .
+            </div>
+            <div id="sol5" class="folder-content">
+                listenting . . .
+            </div>
+            <div class="showcase-footer">
+            </div>
         </main>
     </div>
     <nav class="footer" aria-label="Main navigation">

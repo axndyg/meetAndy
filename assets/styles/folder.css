@@ -601,3 +601,35 @@
         filter: brightness(1.2);
     }
 }
+
+/* In folder.css */
+.folder-content.active-folder {
+    display: flex; /* Ensure it uses flex layout */
+    height: 100%;  /* Instead of 400px, fill the project-display */
+    overflow: hidden; /* Prevent the folder itself from scrolling */
+}
+
+/* In showcase.css */
+.showcase {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Fill the .folder-content */
+    overflow: hidden; /* Clip everything EXCEPT the body */
+}
+
+.showcase-item-content bold { 
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #8da4b1; /* Faded steel blue from your background photo */
+    font-weight: 600;
+}
+
+/* In folder.css */
+.project-display {
+    width: 70%;
+    padding: 30px;
+    overflow-y: hidden; /* Change from auto to hidden */
+    display: flex;      /* Make it a flex container to pass height down */
+    flex-direction: column;
+}
