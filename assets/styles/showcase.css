@@ -2,10 +2,6 @@
     min-height: 550px;
 }
 
-
-
-
-
 .folder-content, .active-folder {
     border: none;
     background: none;
@@ -26,16 +22,13 @@
     
 }
 
-/* 2. Make only the body scrollable */
+/* 2. Body fills remaining height; scroll lives in .the-showcase-scroll */
 .showcase-body {
-   
-    padding-right: 10px; /* Adds space so the scrollbar doesn't overlap content */
-    overflow-y:  scroll;
     display: flex;
     flex-direction: column;
     gap: 5px;
-  
-  
+    flex-grow: 1;
+    min-height: 0;
 }
 
 /* 3. Keep the header from shrinking */
@@ -75,9 +68,6 @@
     }
 
 
-    .the-showcase { 
-       
-    }
 
     .logo-up {
         display: flex;
@@ -248,46 +238,19 @@
     overflow-y: visible;
 }
 
-.project-dashboard { 
-
-}
-
-body { 
-
-}
-
-.project-display { 
-
+.project-display {
     box-sizing: border-box;
-    height: 100%;
-
     display: flex;
     flex-direction: column;
+    /* below for scrolling overflow*/
     padding-bottom: 0px;
-    
 }
 
-.showcase { 
-  
-    
-}
-
-    .showcase-header { 
-        
-    }
-
-    .showcase-body { 
-        flex-grow: 1;
-   
-        
-        flex-shrink: 1;
-    }
-
-
-
-/* Optional: Add a subtle hover effect to the frames */
-.the-showcase-scroll { 
-    overflow-y: scroll;
+.the-showcase-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 10px;
 }
 
 
@@ -325,6 +288,10 @@ body {
 }
 
 
-h4 { 
+h4 {
     margin: -2px 0 2px 0;
+}
+
+.gallery iframe {
+    border-radius: 12px;
 }

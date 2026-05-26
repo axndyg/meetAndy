@@ -46,13 +46,13 @@ body {
     border-radius: 15px;
     background-color: #202c35f0;
     background: linear-gradient(45deg, #252728e3, #1b1d1fce);
-    
 
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
 
+    min-width: 530px;
     max-width: 800px;
     width: 85%;
 
@@ -61,11 +61,11 @@ body {
     animation: fadeIn 1.2s ease-in-out forwards;
 }
 
-/* Footer nav: same width as container */
+/* Footer nav */
 .footer {
-    max-width: 800px;
-    width: 85%;
-    margin-top: 2em;
+    width: 95%;
+    max-width: 100%;
+    margin-top: 1.5em;
     padding: 0.75em 0;
 }
 
@@ -76,7 +76,7 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 0.5em;
+    gap: 0.35em;
     flex-wrap: wrap;
 }
 
@@ -88,9 +88,9 @@ body {
 .footer a {
     color: #FFFFFFAA;
     text-decoration: none;
-    font-size: 0.85em;
+    font-size: 0.8em;
     text-transform: lowercase;
-    padding: 0.5em 1em;
+    padding: 0.45em 0.85em;
     border-radius: 999px;
     border: 1px solid transparent;
     transition: all 0.25s ease;
@@ -177,7 +177,9 @@ body {
 
 .updates {
     padding-top: 1em;
-} 
+}
+
+
 
  ul { 
     list-style: none;
@@ -272,13 +274,6 @@ p {
     font-weight: 300;
 }
 
-.container .placeholder {
-    width: 100%;
-    text-align: center;
-    color: #FFFFFFAA;
-    font-size: 0.95em;
-}
-
 h1 {
     font-size: 1.5em;
 }
@@ -314,24 +309,9 @@ tbody tr:hover {
     background-color: rgba(255, 255, 255, 0.02);
 }
 
-.footer {
-    width: 95%;
-    max-width: 100%;
-    margin-top: 1.5em;
-}
-
-.footer ul {
-    justify-content: center;
-    gap: 0.35em;
-}
-
-.footer a {
-    font-size: 0.8em;
-    padding: 0.45em 0.85em;
-}
-
 /* Mobile responsive styles */
-@media (max-width: 768px) {
+
+@media (max-width: 930px) {
     body {
         margin: 15px;
         min-height: calc(100vh - 30px);
@@ -340,16 +320,25 @@ tbody tr:hover {
     .container {
         flex-direction: column;
         width: 95%;
-        padding: 4% 5%;
-        max-width: 100%;
+        min-width: 0; /* Lets it scale down smoothly on tiny phone screens */
+        margin: 2% 0;
+        max-width: 80%;
+        padding: 6% 5%;
+    }
+
+    .left, .right { 
+        min-height: 0; /* Removes the 485px restriction entirely on mobile */
+        height: auto;
+        width: 100%;
     }
 
     .left {
-        width: 100%;
         padding-right: 0;
         padding-bottom: 2em;
         border-right: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        align-items: center; /* Centers profile elements on mobile for a cleaner look */
+        text-align: center;
     }
 
     .right {
@@ -357,29 +346,16 @@ tbody tr:hover {
         padding-top: 2em;
     }
 
+        .follow-ups  { 
+            display: flex;
+            flex-direction: row;     /* Positions elements side-by-side */
+            justify-content: center;     /* CRITICAL: Centers elements vertically */
+
+        }
+
     .profile-pic {
         width: 140px;
         height: 140px;
-    }
-
-    .updates ul {
-        flex-wrap: wrap;
-    }
-
-    .footer {
-        width: 95%;
-        max-width: 100%;
-        margin-top: 1.5em;
-    }
-
-    .footer ul {
-        justify-content: center;
-        gap: 0.35em;
-    }
-
-    .footer a {
-        font-size: 0.8em;
-        padding: 0.45em 0.85em;
     }
 }
 
