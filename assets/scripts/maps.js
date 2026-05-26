@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 values: {
                     'ES': 'visited', 'MX': 'visited', 'US': 'visited', 
                     'IT': 'visited', 'GB': 'visited', 'BE': 'visited', 
-                    'FR': 'visited', 'SI': 'visited', 'NL': 'visited', 'HN': 'visited'
+                    'FR': 'visited', 'SI': 'visited', 'NL': 'visited', 'HN': 'visited',
+                    'PT': 'visited',
                 },
                 attribute: 'fill',
                 scale: {
