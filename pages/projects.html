@@ -15,7 +15,8 @@
         <aside class="project-sidebar">
             <div class="sidebar-header">directory</div>
             <nav class="sidebar-nav">
-                <button class="tab-link active" onclick="openFolder(event, 'proj1')">llm fine-tuning</button>
+                <button class="tab-link active" onclick="openFolder(event, 'proj4')">doneSimple</button>
+                <button class="tab-link" onclick="openFolder(event, 'proj1')">llm fine-tuning</button>
                 <button class="tab-link" onclick="openFolder(event, 'proj2')">speech accent detection</button>
                 <button class="tab-link" onclick="openFolder(event, 'proj3')">uefa match predictor</button>
             </nav>
@@ -24,7 +25,39 @@
             </div>
         </aside>
         <main class="project-display">
-            <div id="proj1" class="folder-content active-folder">
+            <div id="proj4" class="folder-content active-folder">
+                <div class="project-header-row">
+                    <div class="project-title-group">
+                        <img src="../assets/images/icon/projects/doneSimple.png" class="project-logo" alt="doneSimple Logo">
+                        <h3>doneSimple</h3>
+                    </div>
+                    <button class="live-btn">
+                        <a href="https://github.com/axndyg/doneSimple" target="_blank">
+                            <img src="../assets/images/icon/code-icon.png" class="button-icon" alt="live link">live
+                        </a>
+                    </button>
+                </div>
+
+                <div class="project-specs">
+                    <span>Minimalist Task Management App</span>
+                    <span class="date-tag">May 2026 — Present</span>
+                </div>
+
+                <p class="project-description">
+                    A desktop task management app built on the belief that organization can be simple.
+                    Designed with a distraction-free interface, doneSimple lets you capture, organize,
+                    and complete tasks without the overhead of complex productivity systems.
+                </p>
+
+                <div class="project-tags">
+                    <span class="sk">Tauri</span>
+                    <span class="sk">React</span>
+                    <span class="sk">TypeScript</span>
+                    <span class="sk">Claude Code</span>
+                </div>
+            </div>
+
+            <div id="proj1" class="folder-content">
                 <div class="project-header-row">
                     <div class="project-title-group">
                         <img src="../assets/images/icon/projects/qwen.png" class="project-logo" alt="qwen Logo">

@@ -141,6 +141,12 @@
     margin-right: 10px;
 }
 
+#donesimple-logo {
+    border: 1.5px solid white;
+    border-radius: 10px;
+    padding: 4px;
+}
+
 /* Skills: Lowercase bubbles that match your footer */
 .tools {
     display: flex;
