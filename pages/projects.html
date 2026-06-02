@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../assets/styles/index.css">
     <link rel="stylesheet" href="../assets/styles/folder.css">
     <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700&display=swap" rel="stylesheet">
     <script src="../assets/scripts/tabs.js"></script>
 </head>
 <body>
@@ -15,17 +16,51 @@
         <aside class="project-sidebar">
             <div class="sidebar-header">directory</div>
             <nav class="sidebar-nav">
-                <button class="tab-link active" onclick="openFolder(event, 'proj4')">doneSimple</button>
-                <button class="tab-link" onclick="openFolder(event, 'proj1')">llm fine-tuning</button>
+                <button class="tab-link active" onclick="openFolder(event, 'proj5')">tAIlor</button>
+                <button class="tab-link" onclick="openFolder(event, 'proj4')">doneSimple</button>
+                <button class="tab-link" onclick="openFolder(event, 'proj3')">llm fine-tuning</button>
                 <button class="tab-link" onclick="openFolder(event, 'proj2')">speech accent detection</button>
-                <button class="tab-link" onclick="openFolder(event, 'proj3')">uefa match predictor</button>
+                <button class="tab-link" onclick="openFolder(event, 'proj1')">uefa match predictor</button>
             </nav>
             <div class="sidebar-buffer">
     
             </div>
         </aside>
         <main class="project-display">
-            <div id="proj4" class="folder-content active-folder">
+            <div id="proj5" class="folder-content active-folder">
+                <div class="project-header-row">
+                    <div class="project-title-group">
+                        <img src="../assets/images/icon/projects/tailor_dark.png" class="project-logo" alt="tAIlor Logo">
+                        <h3><span style="font-family:'Atkinson Hyperlegible', sans-serif;">t<span style="color:#F59E0B;">AI</span>lor</span></h3>
+                    </div>
+                    <button class="live-btn">
+                        <a href="https://github.com/axndyg/tAIlor" target="_blank">
+                            <img src="../assets/images/icon/code-icon.png" class="button-icon" alt="live link">live
+                        </a>
+                    </button>
+                </div>
+
+                <div class="project-specs">
+                    <span>In-Browser Resume Curation</span>
+                    <span class="date-tag">May 2026 — Present</span>
+                </div>
+
+                <p class="project-description"> 
+                    Firefox-based extension that takes in <span style="font-family: 'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif;">
+                    L<sup style="font-size: 0.8em; vertical-align: 0.15em; margin-left: -0.36em; margin-right: -0.15em; text-transform: uppercase;">a</sup>T<sub style="font-size: 1em; vertical-align: -0.5ex; margin-left: -0.1667em; margin-right: -0.125em; text-transform: uppercase;">e</sub>X
+                    </span> formatted resumes and a job description to return a <span style="font-family:'Atkinson Hyperlegible', sans-serif;">t<span style="color:#F59E0B;">AI</span>lor</span>-ed 
+                    resume with language effectively aligning your impact and qualifications to any opportunity. 
+                    Leverages your choice in LLM from a selection of models from OpenRouter and independent providers. 
+                </p>
+
+                <div class="project-tags">
+                    <span class="sk">Vite</span>
+                    <span class="sk">React</span>
+                    <span class="sk">TypeScript</span>
+                    <span class="sk">Claude Code</span>
+                </div>
+            </div>
+            <div id="proj4" class="folder-content">
                 <div class="project-header-row">
                     <div class="project-title-group">
                         <img src="../assets/images/icon/projects/doneSimple.png" class="project-logo" alt="doneSimple Logo">
@@ -57,7 +92,7 @@
                 </div>
             </div>
 
-            <div id="proj1" class="folder-content">
+            <div id="proj3" class="folder-content">
                 <div class="project-header-row">
                     <div class="project-title-group">
                         <img src="../assets/images/icon/projects/qwen.png" class="project-logo" alt="qwen Logo">
@@ -124,7 +159,7 @@
                 </div>
             </div>
 
-            <div id="proj3" class="folder-content">
+            <div id="proj1" class="folder-content">
                 <div class="project-header-row">
                     <div class="project-title-group">
                         <img src="../assets/images/icon/projects/uefa.png" class="project-logo" id="uefa" alt="UEFA Logo">
