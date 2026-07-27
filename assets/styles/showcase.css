@@ -195,11 +195,30 @@
         max-width: 100px;
      }
 
-    #sol5 .showcase-header img { 
+    #sol5 .showcase-header img {
         margin-top: 4px;
         padding: 10px;
         max-width: 50px;
         max-height: 50px;
+    }
+
+    #sol6 .showcase-header img {
+        margin-top: 4px;
+        padding: 10px;
+        max-height: 50px;
+        width: auto;
+        object-fit: contain;
+    }
+
+    #sol6 .the-showcase-scroll iframe {
+        display: block;
+        width: 100%;
+        max-width: 560px;
+        aspect-ratio: 16 / 9;
+        height: auto;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        margin-bottom: 10px;
     }
 
 
