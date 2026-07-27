@@ -206,7 +206,9 @@
         margin-top: 4px;
         padding: 10px;
         max-height: 50px;
+        max-width: 120px;
         width: auto;
+        height: auto;
         object-fit: contain;
     }
 
@@ -214,6 +216,7 @@
         display: block;
         width: 100%;
         max-width: 560px;
+        max-height: 315px;
         aspect-ratio: 16 / 9;
         height: auto;
         border: 1px solid rgba(255, 255, 255, 0.08);
