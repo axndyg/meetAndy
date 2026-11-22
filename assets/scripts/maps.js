@@ -1,20 +1,19 @@
-/* ../assets/scripts/map-init.js */
-document.addEventListener("DOMContentLoaded", function() {
-    const map = new jsVectorMap({
-        selector: "#map",
+// Draws the travel map. Called by render.js once the #map element exists.
+// The list of visited countries lives in assets/data/slices.js.
+function initTravelMap(selector, countries) {
+    const visited = {};
+    countries.forEach(code => { visited[code] = 'visited'; });
+
+    return new jsVectorMap({
+        selector: selector,
         map: "world",
         regionsSelectable: false,
         series: {
             regions: [{
-                values: {
-                    'ES': 'visited', 'MX': 'visited', 'US': 'visited', 
-                    'IT': 'visited', 'GB': 'visited', 'BE': 'visited', 
-                    'FR': 'visited', 'SI': 'visited', 'NL': 'visited', 'HN': 'visited',
-                    'PT': 'visited',
-                },
+                values: visited,
                 attribute: 'fill',
                 scale: {
-                    'visited': '#558071' // Your accent green
+                    'visited': '#558071' // accent green
                 }
             }]
         },
@@ -26,8 +25,8 @@ document.addEventListener("DOMContentLoaded", function() {
             },
             hover: {
                 fillOpacity: 0.8,
-                fill: '#78ab9a' 
+                fill: '#78ab9a'
             }
         }
     });
-});
+}

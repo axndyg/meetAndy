@@ -71,6 +71,22 @@ body {
     animation: fadeIn 1.2s ease-in-out forwards;
 }
 
+/* Page-to-page navigation: swap instantly with no blank frame in between (Chrome, Edge, Safari 18.2+) */
+@view-transition { navigation: auto; }
+
+::view-transition-group(*),
+::view-transition-old(*),
+::view-transition-new(*) {
+    animation: none;
+}
+
+/* Only fade in on the first landing, not when switching pages (classes set by nav.js) */
+.no-intro .container {
+    animation: none;
+    opacity: 1;
+}
+
+
 /* Footer nav */
 .footer {
     width: 95%;

@@ -3,232 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>projects | andres r. gutierrez</title>
+    <title>projects</title>
     <link rel="stylesheet" href="../assets/styles/index.css">
-    <link rel="stylesheet" href="../assets/styles/folder.css">
-    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+    <link rel="stylesheet" href="../assets/styles/window.css">
     <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700&display=swap" rel="stylesheet">
-    <script src="../assets/scripts/tabs.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+
+    <script src="../assets/scripts/nav.js"></script>
+    <!-- Content lives in assets/data/projects.js -->
+    <script src="../assets/data/projects.js" defer></script>
+    <script src="../assets/scripts/render.js" defer></script>
 </head>
 <body>
-    <div class="container project-dashboard">
-        
-        <aside class="project-sidebar">
-            <div class="sidebar-header">directory</div>
-            <nav class="sidebar-nav">
-                <button class="tab-link active" onclick="openFolder(event, 'proj6')">tAIlor</button>
-                <button class="tab-link" onclick="openFolder(event, 'proj5')">doneSimple</button>
-                <button class="tab-link" onclick="openFolder(event, 'proj4')">impoverished languages</button>
-                <button class="tab-link" onclick="openFolder(event, 'proj3')">llm fine-tuning</button>
-                <button class="tab-link" onclick="openFolder(event, 'proj2')">speech accent detection</button>
-                <button class="tab-link" onclick="openFolder(event, 'proj1')">uefa match predictor</button>
-            </nav>
-            <div class="sidebar-buffer">
-    
-            </div>
-        </aside>
-        <main class="project-display">
-            <div id="proj6" class="folder-content active-folder">
-                <div class="project-header-row">
-                    <div class="project-title-group">
-                        <img src="../assets/images/icon/projects/tailor_dark.png" class="project-logo" alt="tAIlor Logo">
-                        <h3><span style="font-family:'Atkinson Hyperlegible', sans-serif;">t<span style="color:#F59E0B;">AI</span>lor</span></h3>
-                    </div>
-                    <button class="live-btn">
-                        <a href="https://github.com/axndyg/tAIlor" target="_blank">
-                            <img src="../assets/images/icon/code-icon.png" class="button-icon" alt="live link">live
-                        </a>
-                    </button>
-                </div>
-
-                <div class="project-specs">
-                    <span>In-Browser Resume Curation</span>
-                    <span class="date-tag">May 2026 — Present</span>
-                </div>
-
-                <p class="project-description"> 
-                    Firefox-based extension that takes in <span style="font-family: 'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif;">
-                    L<sup style="font-size: 0.8em; vertical-align: 0.15em; margin-left: -0.36em; margin-right: -0.15em; text-transform: uppercase;">a</sup>T<sub style="font-size: 1em; vertical-align: -0.5ex; margin-left: -0.1667em; margin-right: -0.125em; text-transform: uppercase;">e</sub>X
-                    </span> formatted resumes and a job description to return a <span style="font-family:'Atkinson Hyperlegible', sans-serif;">t<span style="color:#F59E0B;">AI</span>lor</span>-ed 
-                    resume with language effectively aligning your impact and qualifications to any opportunity. 
-                    Leverages your choice in LLM from a selection of models from OpenRouter and independent providers. 
-                </p>
-
-                <div class="project-tags">
-                    <span class="sk">Vite</span>
-                    <span class="sk">React</span>
-                    <span class="sk">TypeScript</span>
-                    <span class="sk">Claude Code</span>
-                </div>
-            </div>
-            <div id="proj5" class="folder-content">
-                <div class="project-header-row">
-                    <div class="project-title-group">
-                        <img src="../assets/images/icon/projects/doneSimple.png" class="project-logo" alt="doneSimple Logo">
-                        <h3>doneSimple</h3>
-                    </div>
-                    <button class="live-btn">
-                        <a href="https://github.com/axndyg/doneSimple" target="_blank">
-                            <img src="../assets/images/icon/code-icon.png" class="button-icon" alt="live link">live
-                        </a>
-                    </button>
-                </div>
-
-                <div class="project-specs">
-                    <span>Minimalist Task Management App</span>
-                    <span class="date-tag">May 2026 — Present</span>
-                </div>
-
-                <p class="project-description">
-                    A desktop task management app built on the belief that organization can be simple.
-                    Designed with a distraction-free interface, doneSimple lets you capture, organize,
-                    and complete tasks without the overhead of complex productivity systems.
-                </p>
-
-                <div class="project-tags">
-                    <span class="sk">Tauri</span>
-                    <span class="sk">React</span>
-                    <span class="sk">TypeScript</span>
-                    <span class="sk">Claude Code</span>
-                </div>
-            </div>
-            <div id="proj4" class="folder-content">
-                <div class="project-header-row">
-                    <div class="project-title-group">
-                        <img src="../assets/images/icon/projects/impoverished.png" class="project-logo" alt="impoverished Logo">
-                        <h3>Impoverished Languages</h3>
-                    </div>
-                    <button class="live-btn">
-                        <a href="../assets/files/subfield_survey.pdf" target="_blank">
-                            <img src="../assets/images/icon/file-icon.png" class="button-icon" alt="live link">
-                        </a>
-                    </button>
-                </div>
-
-                <div class="project-specs">
-                    <span>subfield survey</span>
-                    <span class="date-tag">mar 2026 — may 2026</span>
-                </div>
-
-                <p class="project-description">
-                A look into the NLP research space discussing the foundational papers for handling what I coin the 
-                <i>impoverished languages</i>: low-resource languages, unknown scripts, and constructed langauges. 
-                Offers a concise starting point for future research that is concious to the nuissances of these languages often 
-                blemished by high-resource practice bias. 
-
-                </p>
-
-                <div class="project-tags"><span style="font-family: 'Latin Modern Roman', 'CMU Serif', 'Times New Roman', serif;     border-radius: 999px;background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #FFFFFFAA; padding: 4px 12px;">
-                    L<sup style="font-size: 0.8em; vertical-align: 0.15em; margin-left: -0.36em; margin-right: -0.15em; text-transform: uppercase;">a</sup>T<sub style="font-size: 1em; vertical-align: -0.5ex; margin-left: -0.1667em; margin-right: -0.125em; text-transform: uppercase;">e</sub>X
-                    </span></span>
-                </div>
-            </div>
-
-            <div id="proj3" class="folder-content">
-                <div class="project-header-row">
-                    <div class="project-title-group">
-                        <img src="../assets/images/icon/projects/qwen.png" class="project-logo" alt="qwen Logo">
-                        <h3>Fine-tuned MCQ Qwen-Instruct</h3>
-                    </div>
-
-                </div>
-
-                <div class="project-specs">
-                    <span>LM Supervised Fine-tuning</span>
-                    <span class="date-tag">Nov 2025 — Dec 2025</span>
-                </div>
-
-                <p class="project-description">
-                    Optimized a Qwen2.5-0.5B model for machine learning reasoning via Supervised Fine-Tuning (SFT). Developed a high-signal dataset of 985 samples using synthetic and curated sources, resulting in a 1st place finish (57.6% accuracy) in a competitive cohort of 417 students.
-                </p>
-                <div class="project-links">
-                    <span class="label">Leaderboard:</span>
-                    <a href="https://github.com/axndyg/meetAndy/blob/main/assets/images/gwen-leaderboard.png" target="_blank" class="archive-link">CS189-HW5 (LLM SFT)</a>
-                </div>
-
-                <div class="project-tags">
-                    <span class="sk">PyTorch</span>
-                    <span class="sk">NLP</span>
-                    <span class="sk">Hugging Face</span>
-                    <span class="sk">Data Curation</span>
-                    <span class="sk">SFT</span>
-                </div>
-            </div>
-            <div id="proj2" class="folder-content">
-                <div class="project-header-row">
-                    <div class="project-title-group">
-                        <img src="../assets/images/icon/projects/spa.png" class="project-logo" alt="SPA Logo">
-                        <h3>Speech Accent Detection</h3>
-                    </div>
-                    <button class="live-btn">
-                        <a href="https://drive.google.com/drive/folders/1kSyPX5qJhLXyKJfwP4o9AYHG2kfF3ydL?usp=sharing" target="_blank">
-                            <img src="../assets/images/icon/code-icon.png" class="button-icon" alt="live link">live
-                        </a>
-                    </button>
-                </div>
-
-                <div class="project-specs">
-                    <span>Spectrogram CNN Classification</span>
-                    <span class="date-tag">Nov 2025 — Dec 2025</span>
-                </div>
-
-                <p class="project-description">
-                    Engineered a pipeline to transform raw audio into STFT Spectrograms for "accent image" classification. 
-                    Using a custom 400k-parameter <strong>ResNet</strong>, I stabilized training to achieve 62% accuracy in identifying 
-                    L1 language families—priming ASR systems for more inclusive recognition.
-                </p>
-                <div class="project-links">
-                    <span class="label">Dataset:</span>
-                    <a href="https://accent.gmu.edu/" target="_blank" class="archive-link">The Speech Accent Archive (GMU)</a>
-                </div>
-
-                <div class="project-tags">
-                    <span class="sk">pytorch</span>
-                    <span class="sk">resnet-18</span>
-                    <span class="sk">stft</span>
-                    <span class="sk">nlp</span>
-                    <span class="sk">etl</span>
-                </div>
-            </div>
-
-            <div id="proj1" class="folder-content">
-                <div class="project-header-row">
-                    <div class="project-title-group">
-                        <img src="../assets/images/icon/projects/uefa.png" class="project-logo" id="uefa" alt="UEFA Logo">
-                        <h3>UEFA Euro's Match Predictor</h3>
-                    </div>
-                    <button class="live-btn">
-                        <a href="https://github.com/axndyg/euros-WebScraping/" target="_blank">
-                            <img src="../assets/images/icon/code-icon.png" class="button-icon">live
-                        </a>
-                    </button>
-                </div>
-
-                <div class="project-specs">
-                    <span>Historical Match Trend Analysis</span>
-                    <span class="date-tag">May 2024 - June 2024</span>
-                </div>
-
-                <p class="project-description">
-                    Developed an end-to-end ML pipeline to forecast UEFA Euro 2024 outcomes. 
-                    By programmatically scraping 60+ years of match data via <strong>BeautifulSoup</strong>, 
-                    I trained a <strong>Random Forest Classifier</strong> that successfully predicted 
-                    Spain as the tournament champion.
-                </p>
-                <div class="project-links">
-                    <span class="label">Dataset:</span>
-                    <a href="https://terrikon.com/en/" target="_blank" class="archive-link">Terrikon Football & Sport</a>
-                </div>
-                <div class="project-tags">
-                    <span class="sk">ensemble learning</span>
-                    <span class="sk">web scraping</span>
-                    <span class="sk">feature encoding</span>
-                </div>
-            </div>
-
-        </main>
+    <div class="container window">
+        <div class="window-inner">
+            <header class="window-head"></header>
+            <main class="window-body"></main>
+        </div>
     </div>
-
     <nav class="footer" aria-label="Main navigation">
         <ul>
             <li><a href="../index.html">main card</a></li>
