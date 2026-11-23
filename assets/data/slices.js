@@ -32,8 +32,16 @@
 //   To log a new movie: drop the poster in assets/images/icon/sol/mov/ and add an
 //   entry at the top of that tab's log. It becomes "Latest" automatically.
 //
+// ── Travel ──
+//   countries  one card per country you've been to; each fills in on the globe.
+//     code       two-letter country code ('IT')
+//     name       shown on the card and the globe
+//     note       optional, a line about the country (HTML allowed)
+//     trips      optional, newest first: { title, label, date, image, note }
+//                label is free text ('Next', 'Latest', 'Favorite', ...)
+//     at         only for countries too small for the map: [longitude, latitude]
+//
 // ── Other tabs ──
-//   logos / items   travel trips (shown as a row under the map)
 //   video           kesem: { src, title }
 // ─────────────────────────────────────────────────────────────
 
@@ -46,35 +54,62 @@ window.PAGE_DATA = {
             heading: 'my travels',
             icon: 'images/icon/sol/tl/world.png',
             iconAlt: 'world logo',
-            logos: true,
             memo: [
                 `I've sort of picked up a bug while traveling. It's a real blessing to get to see so much of the world.`,
-                `Below is a map of countries I've been to—along with San Marino and Vatican City.
+                `Give the globe a spin and click a country to see what I got up to there.
                  I hope I'm blessed enough to fill out more.`,
             ],
-            // Two-letter country codes: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
-            map: ['ES', 'MX', 'US', 'IT', 'GB', 'BE', 'FR', 'SI', 'NL', 'HN', 'PT'],
-            items: [
+            journal: 'passport',
+            // One card per country — the globe fills in every country listed here.
+            // code: two-letter country code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+            // Add trips to a country's list as you go, newest first.
+            countries: [
                 {
-                    label: 'Next', title: 'Sevilla to Porto',
-                    image: 'images/icon/sol/tl/spain.png', alt: 'spain logo',
-                    note: `Last Spring Break was a bit calm in Sacramento.
-                           I'm making a trip out this time around to see south Spain
-                           and a bit of Portugal!`,
+                    code: 'ES', name: 'Spain',
+                    trips: [
+                        {
+                            label: 'Next', title: 'Sevilla to Porto', date: '',
+                            image: 'images/icon/sol/tl/spain.png', alt: 'spain logo',
+                            note: `Last Spring Break was a bit calm in Sacramento.
+                                   I'm making a trip out this time around to see south Spain
+                                   and a bit of Portugal!`,
+                        },
+                    ],
                 },
                 {
-                    label: 'Latest', title: "Oahu, Hawai'i",
-                    image: 'images/icon/sol/tl/aulani.png', alt: 'aulani logo',
-                    note: `Our family is big on all things Disney. Naturally
-                           we spent a bit of time at Aulani.`,
+                    code: 'US', name: 'United States',
+                    trips: [
+                        {
+                            label: 'Latest', title: "Oahu, Hawai'i", date: '',
+                            image: 'images/icon/sol/tl/aulani.png', alt: 'aulani logo',
+                            note: `Our family is big on all things Disney. Naturally
+                                   we spent a bit of time at Aulani.`,
+                        },
+                    ],
                 },
                 {
-                    label: 'Favorite', title: 'Florence Study Abroad',
-                    image: 'images/icon/sol/tl/florence.png', alt: 'florence logo',
-                    note: `I had three awesome months abroad in Florence
-                           for my last semester in comunity college. <i>La Doce Vita</i>
-                           as they say.`,
+                    code: 'IT', name: 'Italy',
+                    trips: [
+                        {
+                            label: 'Favorite', title: 'Florence Study Abroad', date: '',
+                            image: 'images/icon/sol/tl/florence.png', alt: 'florence logo',
+                            note: `I had three awesome months abroad in Florence
+                                   for my last semester in comunity college. <i>La Doce Vita</i>
+                                   as they say.`,
+                        },
+                    ],
                 },
+                { code: 'PT', name: 'Portugal' },
+                { code: 'MX', name: 'Mexico' },
+                { code: 'HN', name: 'Honduras' },
+                { code: 'GB', name: 'United Kingdom' },
+                { code: 'FR', name: 'France' },
+                { code: 'BE', name: 'Belgium' },
+                { code: 'NL', name: 'Netherlands' },
+                { code: 'SI', name: 'Slovenia' },
+                // too small for the globe's map, so they show as dots: at = [longitude, latitude]
+                { code: 'SM', name: 'San Marino', at: [12.46, 43.94] },
+                { code: 'VA', name: 'Vatican City', at: [12.45, 41.90] },
             ],
         },
         {

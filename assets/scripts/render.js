@@ -362,7 +362,56 @@
         });
     }
 
-    // --- simple tabs (travel / kesem) ---
+    // --- travel: the log (left) + a spinning globe (right) ---
+    // #travel → globe spins, the log lists countries; #travel/italy → globe turns to Italy,
+    // the log shows Italy's card.
+
+    function travelStage(s) {
+        return `
+            <div class="pane travel-stage">
+                <div class="pane-head"><h3>${s.heading}</h3><img src="${asset(s.icon)}" alt=""></div>
+                ${s.memo ? `<div class="memo">${s.memo.map(p => `<p>${p}</p>`).join('')}</div>` : ''}
+                <div class="travel-log"></div>
+            </div>`;
+    }
+
+    const tripCount = n => `${n} trip${n === 1 ? '' : 's'}`;
+
+    function passportView(s) {
+        const sl = slug(s.tab);
+        return `
+            <div class="journal-head eyebrow">${s.journal || 'passport'}<span>${s.countries.length}</span></div>
+            <div class="passport">${s.countries.map(c => `
+                <a class="stamp" href="#${sl}/${slug(c.name)}" data-code="${c.code}">
+                    <span class="stamp-code">${c.code}</span>
+                    <span class="stamp-name">${c.name}</span>
+                    ${c.trips && c.trips.length ? `<span class="stamp-trips">${c.trips.length}</span>` : ''}
+                </a>`).join('')}
+            </div>`;
+    }
+
+    function countryCard(c) {
+        const trips = c.trips || [];
+        return `
+            <div class="pane country-card">
+                <button class="back-btn">← all countries</button>
+                <span class="kicker">${c.code}${trips.length ? ' · ' + tripCount(trips.length) : ''}</span>
+                <h3>${c.name}</h3>
+                ${c.note ? `<p>${c.note}</p>` : ''}
+                ${trips.map(t => `
+                    <div class="trip">
+                        ${t.image ? `<img class="trip-logo" src="${asset(t.image)}" alt="${attr(t.alt || t.title)}" loading="lazy">` : ''}
+                        <div class="trip-text">
+                            ${t.label || t.date ? `<span class="kicker">${[t.label, t.date].filter(Boolean).join(' · ')}</span>` : ''}
+                            <h4>${t.title}</h4>
+                            ${t.note ? `<p>${t.note}</p>` : ''}
+                        </div>
+                    </div>`).join('')}
+                ${!trips.length && !c.note ? '<p class="loading">no trips logged yet.</p>' : ''}
+            </div>`;
+    }
+
+    // --- simple tabs (kesem) ---
     function shelfItem(item) {
         let img = coverImg(item);
         if (item.link) img = `<a ${ext(item.link)}>${img}</a>`;
@@ -381,7 +430,6 @@
         const kind = s.posters ? ' posters' : s.logos ? ' logos' : '';
         let html = `<div class="pane-head"><h3>${s.heading}</h3><img src="${asset(s.icon)}" alt=""></div>`;
         html += s.memo ? `<div class="memo">${s.memo.map(p => `<p>${p}</p>`).join('')}</div>` : '';
-        if (s.map) html += '<div id="map"></div>';
         if (s.items) html += `<div class="shelf${kind}">${s.items.map(shelfItem).join('')}</div>`;
         if (s.subheading) html += `<h4 class="subheading">${s.subheading}</h4>`;
         if (s.spotify) {
@@ -400,7 +448,12 @@
             `<button class="tab" data-slug="${slug(s.tab)}">${s.tab}</button>`).join('')}</nav>`;
 
         // One container per tab; journal tabs get a stage (left) + journal (right).
-        body.innerHTML = data.entries.map(s => s.log
+        body.innerHTML = data.entries.map(s => s.countries
+            ? `<section class="tab-panel split travel" data-slug="${slug(s.tab)}" hidden>
+                   <div class="stage">${travelStage(s)}</div>
+                   <aside class="journal globe-side"><div class="globe"></div></aside>
+               </section>`
+            : s.log
             ? `<section class="tab-panel split" data-slug="${slug(s.tab)}" hidden>
                    <div class="stage"></div>
                    <aside class="journal">${s.log.some(e => e.spotify) ? '' : journalView(s)}</aside>
@@ -420,7 +473,7 @@
             });
         });
 
-        let map = null;
+        let globe = null;
         const route = () => {
             stopPlayer();
             const [tabKey, entryKey] = decodeURIComponent(location.hash.slice(1)).split('/');
@@ -449,8 +502,28 @@
                 // on phones the stage sits above the journal — bring the opened entry into view
                 if (entry && window.matchMedia('(max-width: 930px)').matches) stage.scrollIntoView({ behavior: 'smooth' });
             }
-            // The map library needs a visible container to size itself, so draw it on first view.
-            if (s.map && !map && window.initTravelMap) map = initTravelMap('#map', s.map);
+            if (s.countries) {
+                const panel = body.querySelector(`.tab-panel[data-slug="${sl}"]`);
+                const log = panel.querySelector('.travel-log');
+                const country = entryKey && s.countries.find(c => slug(c.name) === entryKey);
+                if (!globe && window.initGlobe) {
+                    globe = initGlobe(panel.querySelector('.globe'), s.countries, code => {
+                        const c = s.countries.find(x => x.code === code);
+                        if (c) location.hash = `${sl}/${slug(c.name)}`;
+                    });
+                }
+                log.innerHTML = country ? countryCard(country) : passportView(s);
+                panel.querySelector('.travel-stage').classList.toggle('open', !!country);   // card takes the whole left side
+                panel.querySelector('.stage').scrollTop = 0;
+                if (globe) { globe.select(country ? country.code : null); globe.highlight(null); }
+                const back = log.querySelector('.back-btn');
+                if (back) back.addEventListener('click', () => { location.hash = sl; });
+                log.querySelectorAll('.stamp').forEach(a => {
+                    a.addEventListener('pointerenter', () => globe && globe.highlight(a.dataset.code));
+                    a.addEventListener('pointerleave', () => globe && globe.highlight(null));
+                });
+                if (country && window.matchMedia('(max-width: 930px)').matches) log.scrollIntoView({ behavior: 'smooth' });
+            }
         };
 
         head.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
