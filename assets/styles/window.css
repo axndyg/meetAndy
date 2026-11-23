@@ -658,6 +658,12 @@
 
 .deck { display: flex; gap: 26px; align-items: center; margin-bottom: 16px; }
 
+/* the loaded tape sits centered in the stage; back button stays top-left */
+.deck-view { position: relative; display: flex; flex-direction: column; min-height: 100%; }
+.deck-view .back-btn { align-self: flex-start; }
+.deck-view .deck { margin: auto; }
+.deck-view .deck-side { flex: 0 1 300px; }
+
 .cassette {
     position: relative;
     flex-shrink: 0;
@@ -821,7 +827,11 @@
 .deck-progress div { height: 100%; width: 0; background: var(--sand); transition: width 0.5s linear; }
 .deck-time { font-size: 0.72rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
-.deck-embed iframe { display: block; border-radius: 12px; }
+/* Spotify's player still runs the audio, but stays invisible: our deck is the UI.
+   Kept in the page (not display:none / offscreen) so the browser doesn't throttle it. */
+.deck-embed { position: absolute; left: 0; bottom: 0; width: 300px; height: 80px;
+              opacity: 0; pointer-events: none; clip-path: inset(50%); }
+.deck-embed iframe { display: block; }
 
 @media (prefers-reduced-motion: reduce) { .hub { animation: none; } }
 
@@ -904,6 +914,7 @@
     .shelf-text { display: flex; flex-direction: column; gap: 4px; }
     .entry-body { flex-direction: column; }
     .deck { flex-direction: column; align-items: flex-start; }
+    .deck-view .deck { align-items: center; }
     .cassette { transform: scale(0.9); transform-origin: left top; }
     .trophy .shelf-cover { height: 110px; }
 }
