@@ -132,6 +132,12 @@
 
     // --- trophy case: built from the log ---
     function trophies(s) {
+        // Music: favorites first, then random songs (a new mix on every visit).
+        if (s.stack === 'cassette') {
+            const favs = s.log.filter(e => e.favorite);
+            const rest = s.log.filter(e => !e.favorite).sort(() => Math.random() - 0.5);
+            return [...favs, ...rest].slice(0, 3).map(e => ({ e, label: e.favorite ? 'Favorite' : '' }));
+        }
         const logged = s.log.filter(e => !e.watchlist);
         const picks = [];
         const add = (e, label) => { if (e && !picks.some(p => p.e === e)) picks.push({ e, label }); };
@@ -148,7 +154,7 @@
         const cards = trophies(s).map(({ e, label }) => `
             <a class="trophy" href="#${sl}/${slug(e.title)}">
                 <div class="shelf-cover">${coverImg(e)}</div>
-                <span class="kicker">${label}</span>
+                ${label ? `<span class="kicker">${label}</span>` : ''}
                 <h4>${e.title}</h4>
             </a>`).join('');
         return `
@@ -198,15 +204,15 @@
         if (s.stack === 'vhs') {
             const style = `--x:${(h >>> 3) % 10}px;--label:${LABEL_COLORS[h % LABEL_COLORS.length]};--tilt:${(h % 5) - 2}deg`;
             return `
-                <a class="item vhs" href="${href}" style="${style}" title="${attr(e.title)}">
+                <a class="item${e.watchlist ? ' unwatched' : ''} vhs" href="${href}" style="${style}" title="${attr(e.title)}">
                     <span class="vhs-label"><span class="vhs-title">${e.title}</span>${fav}</span>
-                    <span class="vhs-tag">${e.current ? 'NOW' : 'SP'}</span>
+                    <span class="vhs-tag">${e.watchlist ? 'NEW' : e.current ? 'NOW' : 'SP'}</span>
                 </a>`;
         }
         if (s.stack === 'cassette') {
             const style = `--shell:${SHELLS[h % SHELLS.length]};--band:${BANDS[(h >>> 3) % BANDS.length]};--x:${(h >>> 5) % 10}px`;
             return `
-                <a class="item cas" href="${href}" style="${style}" title="${attr(e.title)}">
+                <a class="item${e.watchlist ? ' unwatched' : ''} cas" href="${href}" style="${style}" title="${attr(e.title)}">
                     <span class="cas-title">${e.title}</span>
                     ${e.artist ? `<span class="cas-artist">${e.artist}</span>` : ''}${fav}
                 </a>`;
@@ -214,7 +220,7 @@
         if (s.stack === 'dvd') {
             const style = `--spine:${DVD_COLORS[h % DVD_COLORS.length]};--x:${(h >>> 3) % 10}px;--w:${86 + h % 14}%`;
             return `
-                <a class="item dvd" href="${href}" style="${style}" title="${attr(e.title)}">
+                <a class="item${e.watchlist ? ' unwatched' : ''} dvd" href="${href}" style="${style}" title="${attr(e.title)}">
                     <span class="dvd-title">${e.title}</span>${fav}
                     ${e.current ? '<span class="dvd-tag">watching</span>' : ''}
                 </a>`;
@@ -222,7 +228,7 @@
         const style = `--spine:${SPINE_COLORS[h % SPINE_COLORS.length]};--w:${80 + h % 20}%;--x:${(h >>> 3) % 12}px;` +
                       `--h:${e.author ? 40 + (h >>> 5) % 8 : 32 + (h >>> 5) % 8}px;--tall:${118 + (h >>> 4) % 34}px;--thick:${30 + (h >>> 6) % 14}px`;
         return `
-            <a class="item spine" href="${href}" style="${style}" title="${attr(e.title)}">
+            <a class="item${e.watchlist ? ' unwatched' : ''} spine" href="${href}" style="${style}" title="${attr(e.title)}">
                 ${e.current ? '<span class="ribbon" title="reading now"></span>' : ''}
                 <span class="spine-title">${e.title}</span>
                 ${e.author ? `<span class="spine-author">${e.author}</span>` : ''}
@@ -231,7 +237,7 @@
 
     function journalView(s) {
         const sl = slug(s.tab);
-        const logged = s.log.filter(e => !e.watchlist);
+        const logged = s.log;   // watchlist items sit on the pile too, marked unwatched
         const max = STACK_MAX[s.stack] || STACK_MAX.books;
         const pile = logged.slice(0, max).map(e => stackItem(s, e, sl)).join('');
         const more = logged.length > max
@@ -246,11 +252,11 @@
     // Stage view: the whole collection standing upright on shelves.
     function shelfView(s) {
         const sl = slug(s.tab);
-        const logged = s.log.filter(e => !e.watchlist);
+        const logged = s.log;
         return `
             <div class="pane">
                 <button class="back-btn">← ${s.heading}</button>
-                <div class="pane-head"><h3>${s.journal || 'journal'}</h3><span class="eyebrow">${logged.length} logged</span></div>
+                <div class="pane-head"><h3>${s.journal || 'journal'}</h3><span class="eyebrow">${logged.length} on the shelf</span></div>
                 <div class="bookcase">${logged.map(e => `<div class="slot">${stackItem(s, e, sl)}</div>`).join('')}</div>
             </div>`;
     }
@@ -411,36 +417,41 @@
             </div>`;
     }
 
-    // --- simple tabs (kesem) ---
-    function shelfItem(item) {
-        let img = coverImg(item);
-        if (item.link) img = `<a ${ext(item.link)}>${img}</a>`;
-        return `
-            <div class="shelf-item">
-                <div class="shelf-cover">${img}</div>
-                <div class="shelf-text">
-                    ${item.label ? `<span class="kicker">${item.label}</span>` : ''}
-                    <h4>${item.title}</h4>
-                    <p>${item.note}</p>
-                </div>
-            </div>`;
-    }
+    // --- kesem: the story (left) + name tag, video and donate button (right) ---
 
-    function simplePane(s) {
-        const kind = s.posters ? ' posters' : s.logos ? ' logos' : '';
-        let html = `<div class="pane-head"><h3>${s.heading}</h3><img src="${asset(s.icon)}" alt=""></div>`;
-        html += s.memo ? `<div class="memo">${s.memo.map(p => `<p>${p}</p>`).join('')}</div>` : '';
-        if (s.items) html += `<div class="shelf${kind}">${s.items.map(shelfItem).join('')}</div>`;
-        if (s.subheading) html += `<h4 class="subheading">${s.subheading}</h4>`;
-        if (s.spotify) {
-            html += '<div class="gallery">' + s.spotify.map(id =>
-                `<iframe src="https://open.spotify.com/embed/track/${id}?utm_source=generator" width="100%" height="80" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`
-            ).join('') + '</div>';
-        }
-        if (s.video) {
-            html += `<iframe class="video" src="${attr(s.video.src)}" title="${attr(s.video.title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="lazy"></iframe>`;
-        }
-        return `<div class="pane">${html}</div>`;
+    function kesemPanel(s) {
+        const roles = (s.roles || []).map(r =>
+            `<li><span>${r.role}</span><span>${[r.chapter, r.year].filter(Boolean).join(' · ')}</span></li>`).join('');
+        const story = (s.story || []).map(sec => `
+            <section class="story-part">
+                <h4 class="kicker">${sec.title}</h4>
+                ${[].concat(sec.text).map(p => `<p>${p}</p>`).join('')}
+            </section>`).join('');
+        const photos = (s.photos || []).map((ph, i) => `
+            <figure class="polaroid" style="--tilt:${[-3, 2, -1, 3][i % 4]}deg">
+                <img src="${asset(ph.image)}" alt="${attr(ph.caption || 'camp photo')}" loading="lazy">
+                ${ph.caption ? `<figcaption>${ph.caption}</figcaption>` : ''}
+            </figure>`).join('');
+        return `
+            <div class="stage">
+                <div class="pane">
+                    <div class="pane-head"><h3>${s.heading}</h3><img src="${asset(s.icon)}" alt="${attr(s.iconAlt || '')}"></div>
+                    <div class="story">${story}</div>
+                </div>
+            </div>
+            <aside class="journal kesem-side">
+                <div class="pane">
+                    ${s.campName ? `
+                    <div class="name-tag">
+                        <div class="name-tag-top"><strong>HELLO</strong><span>my camp name is</span></div>
+                        <div class="name-tag-name">${s.campName}</div>
+                        ${roles ? `<ul class="name-tag-roles">${roles}</ul>` : ''}
+                    </div>` : ''}
+                    ${s.video ? `<iframe class="video" src="${attr(s.video.src)}" title="${attr(s.video.title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="lazy"></iframe>` : ''}
+                    ${s.donate ? `<a class="donate-btn" ${ext(s.donate.href)}>${s.donate.text} ↗</a>` : ''}
+                    ${photos ? `<div class="polaroids">${photos}</div>` : ''}
+                </div>
+            </aside>`;
     }
 
     function renderSlices() {
@@ -458,7 +469,7 @@
                    <div class="stage"></div>
                    <aside class="journal">${s.log.some(e => e.spotify) ? '' : journalView(s)}</aside>
                </section>`
-            : `<section class="tab-panel" data-slug="${slug(s.tab)}" hidden>${simplePane(s)}</section>`
+            : `<section class="tab-panel split kesem" data-slug="${slug(s.tab)}" hidden>${kesemPanel(s)}</section>`
         ).join('');
 
         // Music entries only have Spotify links until their titles/art are looked up.

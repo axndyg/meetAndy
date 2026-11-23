@@ -41,8 +41,13 @@
 //                label is free text ('Next', 'Latest', 'Favorite', ...)
 //     at         only for countries too small for the map: [longitude, latitude]
 //
-// ── Other tabs ──
-//   video           kesem: { src, title }
+// ── KESEM ──
+//   campName   your camp name, on the name tag
+//   roles      [{ role, chapter, year }] — printed on the name tag
+//   story      [{ title, text: [paragraphs] }]
+//   video      { src, title } (YouTube embed link)
+//   donate     { href, text } — the button under the video
+//   photos     optional [{ image, caption }] — shown as polaroids
 // ─────────────────────────────────────────────────────────────
 
 window.PAGE_DATA = {
@@ -254,15 +259,39 @@ window.PAGE_DATA = {
             heading: 'kesem',
             icon: 'images/icon/sol/ck.png',
             iconAlt: 'kesem logo',
-            iconSize: [113, 50],
-            memoInScroll: true,
-            memo: [
-                `<a href="https://www.kesem.org/" target="_blank">KESEM</a> is a National organization offering support to children with a guardian affected by cancer.`,
-                `Yearlong, chapters across U.S Colleges raise money to fund a week-long summer camp offering a mixture of fun activities, life skill workshops, and emotional support.`,
-                `My experience with KESEM is pretty recent, having volunteered as a camp counselor and a unit leader for a week at U.C Berkeley's chapter`,
-                `Seeing the magic first hand, I realized how important what KESEM is doing and how meanginful it is to support them. If you are able to do so, consider donating to <a href="https://donate.kesem.org/team/772429" target="_blank">Kesem Berkeley</a>.`,
+            // The name tag. Leave a year as '' until you fill it in.
+            campName: 'Scuffers',
+            roles: [
+                { role: 'Counselor', chapter: 'UC Berkeley', year: '' },
+                { role: 'Unit Leader', chapter: 'UC Berkeley', year: '' },
+            ],
+            // The story, in short sections (HTML allowed).
+            story: [
+                {
+                    title: 'what it is',
+                    text: [
+                        `<a href="https://www.kesem.org/" target="_blank">KESEM</a> is a National organization offering support to children with a guardian affected by cancer.`,
+                        `Yearlong, chapters across U.S Colleges raise money to fund a week-long summer camp offering a mixture of fun activities, life skill workshops, and emotional support.`,
+                    ],
+                },
+                {
+                    title: 'my summer',
+                    text: [
+                        `My experience with KESEM is pretty recent, having volunteered as a camp counselor and a unit leader for a week at U.C Berkeley's chapter`,
+                    ],
+                },
+                {
+                    title: 'why it matters',
+                    text: [
+                        `Seeing the magic first hand, I realized how important what KESEM is doing and how meanginful it is to support them. If you are able to do so, consider donating to <a href="https://donate.kesem.org/team/772429" target="_blank">Kesem Berkeley</a>.`,
+                    ],
+                },
             ],
             video: { src: 'https://www.youtube.com/embed/8D7w4IZHdG0', title: 'Kesem' },
+            donate: { href: 'https://donate.kesem.org/team/772429', text: 'Donate to Kesem Berkeley' },
+            // Optional polaroids under the video: { image, caption } — image relative to assets/.
+            // Best to skip photos where campers' faces are visible.
+            photos: [],
         },
     ],
 };
