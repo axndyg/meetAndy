@@ -6,14 +6,7 @@
    fixed at the same 485px as the main card's columns; content scrolls inside.
    ───────────────────────────────────────────────────────────── */
 
-:root {
-    --steel: #8da4b1;     /* faded sky blue */
-    --sand: #d9b99b;      /* grass in the background photo */
-    --bone: #ecebe4;
-    --accent: #558071;    /* map green */
-    --line: rgba(255, 255, 255, 0.08);
-    --muted: rgba(255, 255, 255, 0.6);
-}
+/* colors (--steel, --sand, ...) and the small type styles (.eyebrow, .kicker, .sk) live in index.css */
 
 .window {
     flex-direction: column;
@@ -37,14 +30,6 @@
     border-bottom: 1px solid var(--line);
     flex-shrink: 0;
     min-height: 32px;
-}
-
-.eyebrow {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--steel);
-    white-space: nowrap;
 }
 
 .tabs {
@@ -125,53 +110,46 @@
     border-bottom-style: solid;
 }
 
-.kicker {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--steel);
-    font-weight: 600;
-}
-
-.date-tag {
-    font-style: italic;
-    text-transform: lowercase;
-    opacity: 0.55;
-    letter-spacing: 0;
-}
-
-.sk {
-    font-size: 0.72rem;
-    text-transform: lowercase;
-    padding: 3px 10px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #FFFFFFAA;
-    white-space: nowrap;
-}
-
-.tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
-
 .links-row { font-size: 0.85em; margin: 6px 0 0; }
 .links-row .label { color: rgba(255, 255, 255, 0.4); margin-right: 6px; }
 
-/* ═════════════ EXPERIENCE: timeline ═════════════ */
+/* ═════════════ EXPERIENCE: timeline (right) → role (main card) ═════════════
+   Uses the same stage + journal split as slices of life (see .tab-panel.split). */
 
-.timeline { position: relative; margin: 0; padding: 0; }
+.job-view h3 { margin: 4px 0 2px; font-size: 1.35em; font-weight: 600; color: #FFF; line-height: 1.25; }
+.job-view .date-tag { display: block; font-size: 0.8rem; margin-bottom: 4px; }
+.job-view p { margin: 10px 0 0; max-width: 64ch; }
+
+.timeline { list-style: none; margin: 0; padding: 0; display: block; }
+.timeline li { position: relative; padding: 0 0 4px 20px; }
+.timeline li::before {                 /* the line linking one stop to the next */
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 14px;
+    bottom: -10px;
+    width: 1px;
+    background: var(--line);
+}
+.timeline li:last-child::before { display: none; }
 
 .job {
     position: relative;
-    padding-left: 22px;
-    border-left: 1px solid var(--line);
-    margin-left: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: 6px 8px;
+    margin-left: -8px;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.75);   /* not the browser's link blue */
+    text-decoration: none;
+    transition: background 0.2s ease;
 }
-
-.job::before {               /* the dot on the line */
+.job::before {                         /* the stop on the line */
     content: "";
     position: absolute;
-    left: -5px;
-    top: 15px;
+    left: -12px;
+    top: 11px;
     width: 9px;
     height: 9px;
     border-radius: 50%;
@@ -179,75 +157,39 @@
     border: 1px solid rgba(255, 255, 255, 0.35);
     transition: all 0.2s ease;
 }
-.job[open]::before,
-.job:hover::before { background: var(--accent); border-color: var(--accent); }
+.job:hover { background: rgba(255, 255, 255, 0.04); }
+.job:hover::before { border-color: var(--accent); }
+.job.selected { background: rgba(255, 255, 255, 0.07); }
+.job.selected::before { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 3px rgba(85, 128, 113, 0.25); }
 
-/* collapsed row: role · org ........ dates  ⌄ */
-.job summary {
-    list-style: none;
-    cursor: pointer;
+.job-role { font-size: 0.84em; font-weight: 500; line-height: 1.3; color: rgba(255, 255, 255, 0.8); transition: color 0.2s; }
+.job:hover .job-role, .job.selected .job-role { color: #FFF; }
+.job-org { font-size: 0.6rem; letter-spacing: 1.2px; }
+.job-dates { font-size: 0.7rem; }
+
+/* ═════════════ PROJECTS: list (right) → project (main card) ═════════════ */
+
+.project-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.proj {
     display: grid;
-    grid-template-columns: auto 1fr auto auto;
-    align-items: baseline;
-    gap: 12px;
-    padding: 8px 4px 8px 0;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+    padding: 7px 8px;
+    margin-left: -8px;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
 }
-.job summary::-webkit-details-marker { display: none; }
-
-.job-role { font-weight: 500; color: rgba(255, 255, 255, 0.85); transition: color 0.2s; white-space: nowrap; }
-.job summary:hover .job-role,
-.job[open] .job-role { color: #FFF; }
-.job-org { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.job-dates { font-size: 0.75rem; white-space: nowrap; }
-
-.job-chevron {
-    width: 7px;
-    height: 7px;
-    border-right: 1.5px solid rgba(255, 255, 255, 0.45);
-    border-bottom: 1.5px solid rgba(255, 255, 255, 0.45);
-    transform: translateY(-3px) rotate(45deg);
-    transition: transform 0.2s ease;
-    align-self: center;
-}
-.job[open] .job-chevron { transform: translateY(1px) rotate(-135deg); }
-
-.job-body { padding: 0 10px 4px 0; animation: paneIn 0.25s ease; }
-.job-body p { margin: 2px 0 6px; }
-
-/* ═════════════ PROJECTS: grid → detail ═════════════ */
-
-.project-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-}
-
-.project-card {
-    all: unset;
-    box-sizing: border-box;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 16px;
-    border-radius: 12px;
-    border: 1px solid var(--line);
-    background: rgba(255, 255, 255, 0.02);
-    transition: all 0.2s ease;
-    min-width: 0;
-}
-.project-card:hover,
-.project-card:focus-visible {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-}
-
-.project-card-top { display: flex; align-items: center; gap: 12px; }
-.project-card-top img { width: 36px; height: 36px; object-fit: contain; opacity: 0.9; }
-.project-card h3 { margin: 0; font-size: 1em; font-weight: 600; color: #FFF; }
-.project-card .kicker { font-size: 0.65rem; }
-.project-card .tag-row { margin-top: auto; }
+.proj img { width: 28px; height: 28px; object-fit: contain; opacity: 0.7; transition: opacity 0.2s; }
+.proj-text { display: flex; flex-direction: column; min-width: 0; }
+.proj-title { font-size: 0.86em; font-weight: 500; line-height: 1.3; color: rgba(255, 255, 255, 0.8); transition: color 0.2s; }
+.proj .kicker { font-size: 0.58rem; letter-spacing: 1px; line-height: 1.4; }
+.proj:hover { background: rgba(255, 255, 255, 0.04); }
+.proj:hover img, .proj.selected img { opacity: 1; }
+.proj:hover .proj-title, .proj.selected .proj-title { color: #FFF; }
+.proj.selected { background: rgba(255, 255, 255, 0.07); box-shadow: inset 2px 0 0 var(--accent); }
 
 .project-detail-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
 .project-detail-head > img { width: 48px; height: 48px; object-fit: contain; }
@@ -270,40 +212,6 @@
 .pane-head img { height: 34px; width: auto; max-width: 110px; object-fit: contain; opacity: 0.9; }
 
 .memo p { margin: 0 0 10px; max-width: 62ch; }
-
-.shelf-cover {
-    height: 150px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-start;
-    margin-bottom: 6px;
-}
-
-.shelf-cover a { display: block; height: 100%; }
-
-.shelf-cover img {
-    display: block;
-    height: 100%;
-    width: auto;
-    max-width: 100%;
-    object-fit: cover;
-    border-radius: 3px 6px 6px 3px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-left: 3px solid rgba(0, 0, 0, 0.25);       /* book spine */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3), 5px 15px 30px rgba(0, 0, 0, 0.25);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.shelf-cover a:hover img,
-.shelf-cover img:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.45);
-}
-
-.posters .shelf-cover img {
-    aspect-ratio: 2 / 3;
-    border-radius: 4px;
-    border-left-width: 1px;
-}
 
 /* ═════════════ KESEM: story + name tag ═════════════ */
 
@@ -397,8 +305,8 @@
 
 
 /* ═════════════ SLICES OF LIFE: stage + journal ═════════════
-   Journal tabs split into a stage (left: trophy case or one entry's page)
-   and a journal column (right). Each side scrolls on its own if it must. */
+   Journal tabs (and experience / projects) split into a stage (left: the tab's set piece,
+   or the picked item) and a journal column (right). Each side scrolls on its own if it must. */
 
 .tab-panel.split {
     display: grid;
@@ -422,42 +330,11 @@
 .journal-head { display: flex; justify-content: space-between; margin: 2px 0 14px; }
 .journal-head span { color: var(--muted); letter-spacing: 0; }
 
-/* --- trophy case --- */
+/* experience / projects list: fills the column; the arrows stay put at the bottom */
+.side-list { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.side-list .pager, .passport-host .pager { margin-top: auto; padding-top: 12px; }
 
-.trophy-case {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-    margin-top: 14px;
-}
-
-.trophy { display: flex; flex-direction: column; gap: 3px; text-decoration: none; color: inherit; min-width: 0; }
-.trophy .shelf-cover { height: 140px; margin-bottom: 8px; }
-.trophy h4 { margin: 0; font-size: 0.86em; font-weight: 600; color: #FFF; line-height: 1.3; }
-.trophy:hover h4 { color: var(--bone); }
-.trophy:hover img { transform: translateY(-5px) scale(1.02); box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.45); }
-
-/* --- one entry's page --- */
-
-.entry .back-btn { margin: 0 0 16px; }
-
-.entry-body { display: flex; gap: 22px; align-items: flex-start; }
-
-.entry-cover img {
-    display: block;
-    width: 150px;
-    height: auto;
-    border-radius: 3px 6px 6px 3px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-left: 3px solid rgba(0, 0, 0, 0.25);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3), 5px 15px 30px rgba(0, 0, 0, 0.3);
-}
-.entry.posters .entry-cover img { aspect-ratio: 2 / 3; object-fit: cover; border-radius: 4px; border-left-width: 1px; }
-
-.entry-text { min-width: 0; }
-.entry-text h3 { margin: 4px 0 2px; font-size: 1.35em; font-weight: 600; color: #FFF; line-height: 1.25; }
 .entry-author { display: block; font-size: 0.85em; font-style: italic; color: var(--muted); margin-bottom: 6px; }
-.entry-text p { margin: 8px 0 0; }
 
 /* --- the pile: items lying flat, newest on top, resting on a shelf ---
    margin-top: auto pushes it to the bottom of the column but still lets it scroll. */
@@ -495,15 +372,32 @@
     box-shadow: inset 0 0 0 1px rgba(217, 185, 155, 0.6), 0 4px 10px rgba(0, 0, 0, 0.45);
 }
 
-.more-link {
-    align-self: flex-end;
-    margin-top: 10px;
+.pager {                              /* flips between piles when the journal overflows one */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 12px;
     font-size: 0.75em;
-    color: var(--sand);
-    text-decoration: none;
-    border-bottom: 1px dashed rgba(217, 185, 155, 0.4);
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
 }
-.more-link:hover { color: var(--bone); border-bottom-style: solid; }
+.pager-btn {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(217, 185, 155, 0.4);
+    background: transparent;
+    color: var(--sand);
+    font: inherit;
+    font-size: 1.1em;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.pager-btn:hover:not(:disabled) { color: var(--bone); border-color: var(--bone); background: rgba(217, 185, 155, 0.1); }
+.pager-btn:disabled { opacity: 0.3; cursor: default; }
 
 /* ── books ── */
 
@@ -694,24 +588,35 @@
 }
 .cas .fav { color: #b5533c; font-size: 0.7rem; }
 
-.bookcase .cas { width: 28px; height: 132px; padding: 8px 0; border-left: none; border-top: 10px solid var(--band); }
-.bookcase .cas-artist { display: none; }
-
-.trophy-case.albums .shelf-cover img { aspect-ratio: 1; border-radius: 4px; border-left-width: 1px; }
 
 .loading { color: var(--muted); font-style: italic; font-size: 0.8em; }
 
 /* ═════════════ TRAVEL: the globe + passport ═════════════ */
 
 /* log on the left, globe gets the wider right column */
-.tab-panel.split.travel { grid-template-columns: minmax(250px, 1fr) minmax(0, 1fr); }
+.tab-panel.split.travel { grid-template-columns: minmax(250px, 1.3fr) minmax(0, 1fr); }
 .travel-stage.open > .pane-head,
 .travel-stage.open > .memo { display: none; }   /* a selected country's card gets the whole left side */
 .travel-stage .memo { margin-bottom: 14px; }
 .travel-stage .country-card { margin-top: 0; }
 
-.globe-side { display: flex; overflow: hidden; }
-.globe { position: relative; flex: 1; min-height: 240px; display: flex; justify-content: center; align-items: center; }
+.globe-side { display: flex; flex-direction: column; overflow: hidden; }
+.globe { position: relative; flex: 1; min-height: 160px; display: flex; justify-content: center; align-items: center; }
+
+/* the passport under the globe: a fixed box, paged to fit (see fittedList in render.js) */
+.passport-box {
+    flex: 0 0 196px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+}
+.passport-box .journal-head { margin-bottom: 8px; }
+.passport-host { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+
+.travel-hint { font-size: 0.8em; font-style: italic; color: var(--muted); }
 .globe svg {
     display: block;
     height: 100%;
@@ -763,21 +668,23 @@
     pointer-events: none;
 }
 
-/* the passport: one row per country, with an inked code like a stamp */
-.passport { display: flex; flex-direction: column; gap: 2px; }
+/* the passport: two columns of countries, each with an inked code like a stamp */
+.passport { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px 6px; }
 .stamp {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 7px 8px;
+    gap: 8px;
+    min-width: 0;
+    padding: 5px 6px;
     border-radius: 8px;
     border: 1px solid transparent;
     color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
-    font-size: 0.85em;
+    font-size: 0.8em;
     transition: background 0.15s ease, border-color 0.15s ease;
 }
 .stamp:hover { background: rgba(255, 255, 255, 0.05); border-color: var(--line); color: #FFF; }
+.stamp.selected { background: rgba(255, 255, 255, 0.08); border-color: rgba(217, 185, 155, 0.35); color: #FFF; }
 .stamp-code {
     flex: none;
     width: 28px;
@@ -804,15 +711,226 @@
 .trip h4 { margin: 2px 0 0; font-size: 0.92em; font-weight: 600; color: #FFF; line-height: 1.3; }
 .trip p { font-size: 0.8em; line-height: 1.5; }
 
-/* ═════════════ MUSIC: the tape deck ═════════════ */
+/* ═════════════ SET PIECES: music's tape deck, film & tv's television, readings' book ═════════════ */
+
+/* intro on top; the set sits centered in the space below it */
+.set-view { position: relative; display: flex; flex-direction: column; min-height: 100%; }
+.set-slot { flex: 1; display: flex; flex-direction: column; }
+.set-view .deck-side { flex: 0 1 300px; }
 
 .deck { display: flex; gap: 26px; align-items: center; margin-bottom: 16px; }
-
-/* the loaded tape sits centered in the stage; back button stays top-left */
-.deck-view { position: relative; display: flex; flex-direction: column; min-height: 100%; }
-.deck-view .back-btn { align-self: flex-start; }
 .deck-view .deck { margin: auto; }
-.deck-view .deck-side { flex: 0 1 300px; }
+
+/* picking something new swaps only the .set-slot:
+   the tape drops into the deck / the tv changes channel, and the text eases in beside it.
+   Uses `translate` / `scale` (not transform) so the phone-size scale on .cassette still applies. */
+.set-slot.swap .cassette { animation: tapeIn 0.42s cubic-bezier(0.2, 0.9, 0.3, 1.15); }
+.set-slot.swap .tv-screen { animation: screenFlash 0.5s ease-out; }
+.set-slot.swap .tv-screen img { animation: channelIn 0.5s cubic-bezier(0.2, 0.8, 0.3, 1); }
+.set-slot.swap .book { animation: fadeIn 0.3s ease; }
+.set-slot.swap .book-3d { animation: bookIn 0.55s cubic-bezier(0.2, 0.8, 0.3, 1.1); }
+.set-slot.swap .deck-side > *,
+.set-slot.swap .set-review { animation: sideIn 0.35s ease 0.08s both; }
+
+@keyframes tapeIn {
+    from { translate: 0 -22px; opacity: 0; rotate: -2deg; }
+    60%  { opacity: 1; }
+    to   { translate: 0 0; opacity: 1; rotate: 0deg; }
+}
+@keyframes channelIn {               /* the picture collapses to a line, then opens back up */
+    from { scale: 1 0.02; opacity: 0.6; }
+    45%  { scale: 1 1.03; opacity: 1; }
+    to   { scale: 1 1; }
+}
+@keyframes screenFlash {
+    from { background-color: #d6dcdc; }
+    35%  { background-color: #0b0c0d; }
+}
+@keyframes bookIn {                  /* pulled off the stack: swings round to show its cover */
+    from { transform: translateY(-12px) rotateY(-80deg) rotateX(4deg); }
+    to   { transform: rotateY(-28deg) rotateX(4deg); }
+}
+@keyframes fadeIn { from { opacity: 0; } }
+@keyframes sideIn {
+    from { opacity: 0; translate: 6px 0; }
+    to   { opacity: 1; translate: 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .set-slot.swap .cassette, .set-slot.swap .tv-screen, .set-slot.swap .tv-screen img,
+    .set-slot.swap .book, .set-slot.swap .book-3d,
+    .set-slot.swap .deck-side > *, .set-slot.swap .set-review { animation: none; }
+}
+
+.set-review p { margin: 0 0 10px; max-width: 62ch; }
+
+/* --- the television: walnut cabinet, rabbit ears, the poster on a glowing screen --- */
+
+.tv-set { display: flex; gap: 26px; align-items: center; margin: auto; padding-bottom: 8px; }
+.tv-set .deck-side p { margin: 10px 0 0; }
+
+.tv { position: relative; flex-shrink: 0; width: 250px; padding-top: 30px; }
+
+.tv-antenna {                         /* rabbit ears on a little dome */
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    width: 30px;
+    height: 12px;
+    margin-left: -15px;
+    border-radius: 15px 15px 0 0;
+    background: linear-gradient(to bottom, #3b3833, #23211e);
+}
+.tv-antenna::before,
+.tv-antenna::after {
+    content: "";
+    position: absolute;
+    bottom: 6px;
+    left: 14px;
+    width: 2px;
+    height: 36px;
+    border-radius: 1px;
+    background: linear-gradient(to top, #9a968c, #d6d2c8);
+    transform-origin: bottom center;
+}
+.tv-antenna::before { rotate: -32deg; }
+.tv-antenna::after  { rotate: 26deg; }
+
+.tv-body {
+    position: relative;
+    display: flex;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 14px;
+    background:
+        repeating-linear-gradient(95deg, rgba(0, 0, 0, 0.08) 0 3px, transparent 3px 9px),
+        linear-gradient(160deg, #7a5539, #4c3323 70%, #3c2819);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -2px 0 rgba(0, 0, 0, 0.3),
+                0 4px 8px rgba(0, 0, 0, 0.4), 0 18px 30px rgba(0, 0, 0, 0.35);
+}
+
+.tv-screen {
+    position: relative;
+    flex: 1;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 22px / 26px;        /* the bulging CRT glass */
+    background: #0b0c0d;
+    box-shadow: 0 0 0 4px #1b1a18, 0 0 0 5px rgba(255, 255, 255, 0.08);
+}
+.tv-glow {                            /* the poster again, blurred, so the screen glows its colors */
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.25);
+    filter: blur(12px) brightness(0.5) saturate(1.3);
+}
+.tv-poster { position: relative; display: block; height: 100%; width: auto; margin: 0 auto; object-fit: cover; aspect-ratio: 2 / 3; }
+.tv-screen::before,                   /* scanlines */
+.tv-screen::after {                   /* glass glare + vignette */
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    border-radius: inherit;
+}
+.tv-screen::before { background: repeating-linear-gradient(to bottom, transparent 0 2px, rgba(0, 0, 0, 0.18) 2px 3px); }
+.tv-screen::after {
+    background:
+        radial-gradient(ellipse at 30% 18%, rgba(255, 255, 255, 0.16), transparent 45%),
+        radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55));
+}
+
+.tv-panel { width: 38px; display: flex; flex-direction: column; align-items: center; gap: 10px; padding-top: 4px; }
+.knob {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #e2dccd, #9a9284 60%, #5d574d);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+}
+.knob::after { content: ""; position: absolute; top: 3px; left: 10px; width: 2px; height: 7px; border-radius: 1px; background: #3b3732; }
+.knob + .knob::after { rotate: 60deg; transform-origin: 1px 8px; }
+.tv-grille {
+    flex: 1;
+    width: 24px;
+    min-height: 24px;
+    margin-bottom: 2px;
+    border-radius: 3px;
+    background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0 2px, transparent 2px 5px);
+}
+.tv-legs {                            /* two stubby legs */
+    height: 10px;
+    margin: 0 30px;
+    background: linear-gradient(to right, #3a281b 0 10px, transparent 10px calc(100% - 10px), #3a281b calc(100% - 10px));
+}
+
+/* --- the book: a hardcover turned to show its page edges, the cover image on the front ---
+   No opacity on .book-3d itself: that would flatten the 3D. */
+
+.book-set { display: flex; gap: 30px; align-items: center; margin: auto; padding-bottom: 8px; }
+.book-set .deck-side p { margin: 10px 0 0; }
+
+.book { --t: 26px; position: relative; flex-shrink: 0; padding: 6px 24px 24px 8px; perspective: 900px; }
+.book::after {                        /* shadow on the table */
+    content: "";
+    position: absolute;
+    left: 14px;
+    right: 0;
+    bottom: 10px;
+    height: 16px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.5), transparent 70%);
+}
+.book-3d {
+    position: relative;
+    z-index: 1;
+    width: 130px;
+    height: 195px;
+    transform-style: preserve-3d;
+    transform: rotateY(-28deg) rotateX(4deg);
+    transition: transform 0.4s ease;
+}
+.book:hover .book-3d { transform: rotateY(-18deg) rotateX(4deg); }
+.book-cover,
+.book-back { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 2px 5px 5px 2px; }
+.book-cover { display: block; object-fit: cover; transform: translateZ(calc(var(--t) / 2)); }
+.book-3d::after {                     /* hinge crease + a little shine over the cover */
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 2px 5px 5px 2px;
+    transform: translateZ(calc(var(--t) / 2 + 0.5px));
+    background:
+        linear-gradient(to right, rgba(0, 0, 0, 0.35) 0 3px, rgba(255, 255, 255, 0.18) 3px 5px, transparent 10px),
+        linear-gradient(120deg, rgba(255, 255, 255, 0.14), transparent 40%);
+    pointer-events: none;
+}
+.book-back { background: var(--back); transform: translateZ(calc(var(--t) / -2)); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3); }
+.book-pages {                         /* the page edges, turned to face right */
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: calc(100% - 3px - var(--t) / 2);
+    width: var(--t);
+    transform: rotateY(90deg);
+    background: repeating-linear-gradient(to right, #efe9db 0 1px, #d6cdba 1px 2px);
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+}
+.book-ribbon {                        /* bookmark hanging out of the one being read now */
+    position: absolute;
+    bottom: -18px;
+    right: 26px;
+    width: 8px;
+    height: 28px;
+    background: #9c4a3c;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 78%, 0 100%);
+}
+
+/* --- the tape deck --- */
 
 .cassette {
     position: relative;
@@ -985,47 +1103,6 @@
 
 @media (prefers-reduced-motion: reduce) { .hub { animation: none; } }
 
-/* --- the whole collection, standing upright on shelves (#tab/_all) ---
-   Each row is a 158px slot + 14px gap; the repeating gradient draws a board under every row. */
-
-.bookcase {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    column-gap: 3px;
-    row-gap: 14px;
-    margin-top: 12px;
-    padding: 0 6px 8px;
-    background: repeating-linear-gradient(to bottom,
-        transparent 0 158px,
-        rgba(217, 185, 155, 0.24) 158px 162px,
-        rgba(0, 0, 0, 0.35) 162px 165px,
-        transparent 165px 172px);
-}
-.slot { height: 158px; display: flex; align-items: flex-end; }
-
-.bookcase .item { writing-mode: vertical-rl; margin: 0; transform: none; }
-.bookcase .item:hover { transform: translateY(-8px); filter: brightness(1.2); }
-
-.bookcase .spine { width: var(--thick); height: var(--tall); padding: 14px 0; align-items: center; }
-.bookcase .spine::before,
-.bookcase .spine::after { top: auto; bottom: auto; left: 5px; right: 5px; width: auto; height: 2px; border: none;
-    border-top: 1px solid rgba(217, 185, 155, 0.45); border-bottom: 1px solid rgba(217, 185, 155, 0.25); }
-.bookcase .spine::before { top: 6px; }
-.bookcase .spine::after { bottom: 6px; }
-.bookcase .ribbon { display: none; }
-.bookcase .spine-title,
-.bookcase .spine-author,
-.bookcase .vhs-title,
-.bookcase .dvd-title { max-width: none; max-height: 100%; }
-
-.bookcase .vhs { width: 30px; height: 150px; padding: 10px 0; }
-.bookcase .vhs-label { width: 19px; height: auto; max-height: 112px; overflow: hidden; padding: 8px 0;
-    background: linear-gradient(to right, transparent 0 3px, #b5533c 3px 5px, transparent 5px), var(--label); }
-.bookcase .vhs-title { padding: 0 0 0 2px; }
-
-.bookcase .dvd { width: 22px; height: 140px; padding: 10px 0; border-left: none; border-top: 4px solid rgba(255, 255, 255, 0.18); }
-
 /* ═════════════ phones & narrow screens ═════════════
    Same breakpoint where the main card stacks. The window grows with its
    content instead of scrolling inside a fixed box. */
@@ -1038,29 +1115,18 @@
     .tabs { margin-left: 0; width: 100%; }
     .back-btn { margin-left: auto; }
 
-    .project-grid { grid-template-columns: 1fr; }
-
-    /* timeline rows stack: role / org / dates */
-    .job summary { grid-template-columns: 1fr auto; row-gap: 2px; }
-    .job-role { white-space: normal; }
-    .job-org { grid-column: 1; }
-    .job-dates { grid-column: 1; }
-    .job-chevron { grid-column: 2; grid-row: 1 / span 3; }
-
     /* journal tabs: stage on top, journal underneath */
     .tab-panel.split { display: flex; flex-direction: column; height: auto; }
     .stage, .journal { overflow: visible; }
-    .deck { gap: 18px; }
+    .deck, .tv-set, .book-set { gap: 18px; }
     .kesem-side { padding-left: 0; }
     .globe-side { order: -1; border-top: none; padding-top: 0; }   /* phones: globe on top, log underneath */
     .globe { flex: none; height: min(86vw, 380px); }
+    .passport-box { flex: none; }
     .journal { border-left: none; border-top: 1px solid var(--line); padding: 16px 0 0; }
 }
 
 @media (max-width: 480px) {
-    .entry-body { flex-direction: column; }
-    .deck { flex-direction: column; align-items: flex-start; }
-    .deck-view .deck { align-items: center; }
+    .deck, .tv-set, .book-set { flex-direction: column; align-items: center; }
     .cassette { transform: scale(0.9); transform-origin: left top; }
-    .trophy .shelf-cover { height: 110px; }
 }

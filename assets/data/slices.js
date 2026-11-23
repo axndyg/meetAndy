@@ -9,28 +9,27 @@
 //
 // ── Journal tabs (readings / movies / tv) ──
 //   journal    name of the right-hand column ('the stack', 'film diary', ...)
-//   stack      how the journal is drawn: 'books' (spines), 'vhs' (tapes), 'dvd' (box sets)
-//              or 'cassette' (music — clicking one loads it into a tape deck that plays it)
-//   posters    true = tall poster covers (movies / tv)
+//   stack      how the journal is drawn, and the set piece on the main card:
+//              'books' (spines → a hardcover), 'vhs' (tapes → a TV), 'dvd' (box sets → a TV)
+//              or 'cassette' (music → a tape deck that plays the song).
+//              Picking something in the journal loads it into the set; with nothing picked,
+//              the current entry is loaded, else a favorite, else the newest.
 //   log        everything you've read / watched, NEWEST FIRST. Each entry:
 //     title      name of the thing
 //     author     optional (shown on book spines)
 //     date       optional, free text: 'nov 2026'
 //     image      cover, relative to assets/
 //     link       optional: goodreads / letterboxd / imdb ...
-//     note       a sentence or two (HTML allowed) — shown in the case and on the entry page
-//     review     optional longer thoughts — only on the entry page (HTML allowed)
-//     current    true = "Current" in the trophy case (e.g. reading right now)
-//     favorite   true = "Favorite" in the trophy case
-//     watchlist  true = "On the watchlist" — shown in the case, not in the journal
+//     note       a sentence or two (HTML allowed) — shown beside the set
+//     review     optional longer thoughts — shown under the set (HTML allowed)
+//     current    true = reading / watching it now (a book gets a bookmark ribbon)
+//     favorite   true = marked with a ★
+//     watchlist  true = not watched yet — faded on the pile
 //     spotify    music only: a Spotify song link. Title + album art fill in automatically.
 //     artist     music only, optional: shown on the tape label
 //
-//   The trophy case fills itself: current → latest (newest logged entry) → favorites
-//   → watchlist, topped up with "Recent" entries if there are fewer than 3.
-//
 //   To log a new movie: drop the poster in assets/images/icon/sol/mov/ and add an
-//   entry at the top of that tab's log. It becomes "Latest" automatically.
+//   entry at the top of that tab's log. It lands on top of the pile.
 //
 // ── Travel ──
 //   countries  one card per country you've been to; each fills in on the globe.
@@ -129,8 +128,7 @@ window.PAGE_DATA = {
             ],
             journal: 'the stack',
             stack: 'books',
-            // Newest first — add new books at the TOP. The first non-current, non-watchlist
-            // entry automatically shows up in the trophy case as "Latest".
+            // Newest first — add new books at the TOP.
             log: [
                 {
                     title: 'The Count of Monte Cristo', author: 'Alexandre Dumas', current: true, date: '',
@@ -158,7 +156,6 @@ window.PAGE_DATA = {
             heading: "what i'm watching",
             icon: 'images/icon/sol/mov/film.png',
             iconAlt: 'film logo',
-            posters: true,
             memo: [
                 `My sister is an actress, my brother a screenwriter—so naturally I chose to study Data Science.`,
                 `In all honesty, movies and media is as big for us as it's big for every other family and I find a great love in watching
@@ -194,7 +191,6 @@ window.PAGE_DATA = {
             heading: "what's on tv!",
             icon: 'images/icon/sol/tv/tele.png',
             iconAlt: 'tv logo',
-            posters: true,
             memo: [
                 `As much as I'm a buff for movies, I am one for TV too.`,
                 `And the love is much the same why I enjoy movies: I can share a good watch with my family.`,

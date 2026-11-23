@@ -9,6 +9,52 @@ html {
 }
 
 
+:root {
+    --steel: #8da4b1;     /* faded sky blue */
+    --sand: #d9b99b;      /* grass in the background photo */
+    --bone: #ecebe4;
+    --accent: #558071;    /* map green */
+    --line: rgba(255, 255, 255, 0.08);
+    --muted: rgba(255, 255, 255, 0.6);
+}
+
+/* small type shared by every card */
+.eyebrow {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--steel);
+    white-space: nowrap;
+}
+
+.kicker {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--steel);
+    font-weight: 600;
+}
+
+.date-tag {
+    font-style: italic;
+    text-transform: lowercase;
+    opacity: 0.55;
+    letter-spacing: 0;
+}
+
+.sk {
+    font-size: 0.72rem;
+    text-transform: lowercase;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #FFFFFFAA;
+    white-space: nowrap;
+}
+
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+
 /* The wrapper for the whole system */
 .cabinet {
     display: flex;

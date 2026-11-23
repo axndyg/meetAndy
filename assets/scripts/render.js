@@ -35,46 +35,133 @@
         return `<div class="tag-row">${pills}</div>`;
     }
 
-    // ═════════════ EXPERIENCE: timeline ═════════════
-    // Each job is a one-line <details> that expands in place; name="jobs" makes it an
-    // accordion (opening one closes the others), so the list always fits without scrolling.
+    // ← 1 / 3 → under a list that's too long for one page. Buttons carry data-step="-1" / "1".
+    function pagerView(page, pages, what) {
+        if (pages < 2) return '';
+        return `
+            <div class="pager">
+                <button class="pager-btn" data-step="-1" aria-label="previous ${what}"${page === 0 ? ' disabled' : ''}>←</button>
+                <span>${page + 1} / ${pages}</span>
+                <button class="pager-btn" data-step="1" aria-label="next ${what}"${page === pages - 1 ? ' disabled' : ''}>→</button>
+            </div>`;
+    }
+    const onPager = (root, go) => root.querySelectorAll('.pager-btn').forEach(b =>
+        b.addEventListener('click', () => go(Number(b.dataset.step))));
+
+    // A list split into pages that each fit the room it has, measured in the browser, so it
+    // never scrolls whatever the text length or screen size. On phones the card grows with
+    // its content instead, so everything shows on one page.
+    //   host   element the list + arrows are drawn into
+    //   rows   one HTML string per item; wrap(html) puts them in the list element
+    //   room   () => px available inside host
+    //   after  () => called after every draw (mark the selected item, bind hovers, ...)
+    const PAGER_H = 46;   // the arrows' row, with its margin
+    const phone = () => window.matchMedia('(max-width: 930px)').matches;
+
+    function fittedList({ host, rows, wrap, room, what = 'page', after }) {
+        let pages = [[0, rows.length]], page = 0, focus = -1;
+        const fit = () => {
+            pages = [[0, rows.length]];
+            const space = phone() ? 0 : room();
+            if (!space || !rows.length) return;
+            host.innerHTML = wrap(rows.join(''));
+            const box = [...host.firstElementChild.children].map(el => el.getBoundingClientRect());
+            if (box[box.length - 1].bottom - box[0].top <= space) return;   // all fit, no arrows needed
+            const fits = space - PAGER_H;
+            pages = [];
+            let start = 0;
+            box.forEach((b, j) => {
+                if (j > start && b.bottom - box[start].top > fits) { pages.push([start, j]); start = j; }
+            });
+            pages.push([start, rows.length]);
+        };
+        const draw = () => {
+            page = Math.min(Math.max(page, 0), pages.length - 1);
+            const [a, b] = pages[page];
+            host.innerHTML = wrap(rows.slice(a, b).join('')) + pagerView(page, pages.length, what);
+            onPager(host, step => { page += step; draw(); });
+            if (after) after();
+        };
+        // open on the page holding item i (or stay put when i is -1)
+        const show = i => {
+            focus = i;
+            const at = pages.findIndex(([a, b]) => i >= a && i < b);
+            if (at >= 0) page = at;
+            draw();
+        };
+        const api = {
+            show(i) { fit(); show(i); },                        // re-measured each time: cheap, and never stale
+            refit() { if (host.offsetParent) api.show(focus); }, // skipped while its tab is hidden
+        };
+        let t;
+        window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(api.refit, 120); });
+        if (document.fonts) document.fonts.ready.then(api.refit);   // text sizes change once the font loads
+        return api;
+    }
+
+    // ═════════════ EXPERIENCE + PROJECTS: list (right) → main card ═════════════
+    // Same layout as the slices journals: the list runs down the right and the picked item
+    // fills the main card. #item-name in the URL keeps the pick (the first item by default).
+
+    function listAndDetail({ label, listClass, items, key, row, detail }) {
+        body.innerHTML = `
+            <section class="tab-panel split">
+                <div class="stage"></div>
+                <aside class="journal">
+                    <div class="journal-head eyebrow">${label}<span>${items.length}</span></div>
+                    <div class="side-list"></div>
+                </aside>
+            </section>`;
+        const stage = body.querySelector('.stage');
+        const journal = body.querySelector('.journal');
+        const host = body.querySelector('.side-list');
+        let current = items[0];
+        const list = fittedList({
+            host,
+            rows: items.map(it => `<li>${row(it, '#' + key(it))}</li>`),
+            wrap: html => `<ol class="${listClass}">${html}</ol>`,
+            room: () => journal.getBoundingClientRect().bottom - host.getBoundingClientRect().top,
+            after: () => host.querySelectorAll('li > a').forEach(a =>
+                a.classList.toggle('selected', a.getAttribute('href') === '#' + key(current))),
+        });
+        const show = () => {
+            const picked = items.find(it => key(it) === decodeURIComponent(location.hash.slice(1)));
+            current = picked || items[0];
+            stage.innerHTML = detail(current);
+            stage.scrollTop = 0;
+            list.show(items.indexOf(current));   // the page the picked item is on
+            if (picked && phone()) stage.scrollIntoView({ behavior: 'smooth' });
+        };
+        window.addEventListener('hashchange', show);
+        show();
+    }
+
+    function jobView(job) {
+        return `
+            <div class="pane job-view">
+                <span class="kicker">${job.org}</span>
+                <h3>${job.role}</h3>
+                <span class="date-tag">${job.dates}</span>
+                <p>${job.description}</p>
+                ${linksRow(job.links)}
+            </div>`;
+    }
 
     function renderExperience() {
-        body.innerHTML = `<div class="timeline pane">${data.entries.map(job => `
-            <details class="job" name="jobs">
-                <summary>
+        listAndDetail({
+            label: 'timeline', listClass: 'timeline', items: data.entries,
+            key: job => slug(job.role),
+            row: (job, href) => `
+                <a class="job" href="${href}">
                     <span class="job-role">${job.role}</span>
                     <span class="kicker job-org">${job.org}</span>
-                    <span class="job-dates date-tag">${job.dates}</span>
-                    <span class="job-chevron" aria-hidden="true"></span>
-                </summary>
-                <div class="job-body">
-                    <p>${job.description}</p>
-                    ${linksRow(job.links)}
-                </div>
-            </details>`).join('')}
-        </div>`;
+                    <span class="date-tag job-dates">${job.dates}</span>
+                </a>`,
+            detail: jobView,
+        });
     }
-
-    // ═════════════ PROJECTS: grid → detail ═════════════
-    // Clicking a card sets #project-name in the URL, so the back button returns to the grid
-    // and a project can be linked to directly.
 
     const BUTTON_ICONS = { code: 'images/icon/code-icon.png', file: 'images/icon/file-icon.png' };
-
-    function projectCard(p) {
-        return `
-            <button class="project-card" data-slug="${slug(p.tab)}">
-                <div class="project-card-top">
-                    ${p.logo ? `<img src="${asset(p.logo)}" alt="">` : ''}
-                    <div>
-                        <h3>${p.title}</h3>
-                        <span class="kicker">${p.subtitle}</span>
-                    </div>
-                </div>
-                ${tagRow((p.tags || []).slice(0, 4))}
-            </button>`;
-    }
 
     function projectDetail(p) {
         const live = p.live ? `
@@ -101,102 +188,34 @@
     }
 
     function renderProjects() {
-        const show = () => {
-            const p = data.entries.find(e => slug(e.tab) === location.hash.slice(1));
-            if (p) {
-                head.innerHTML = `<span class="eyebrow">${data.title}</span><button class="back-btn">← all projects</button>`;
-                head.querySelector('.back-btn').addEventListener('click', () => {
-                    history.length > 1 && history.state?.fromGrid ? history.back() : (location.hash = '');
-                });
-                body.innerHTML = projectDetail(p);
-            } else {
-                head.innerHTML = `<span class="eyebrow">${data.title}</span>`;
-                body.innerHTML = `<div class="project-grid pane">${data.entries.map(projectCard).join('')}</div>`;
-                body.querySelectorAll('.project-card').forEach(card => card.addEventListener('click', () => {
-                    history.pushState({ fromGrid: true }, '', '#' + card.dataset.slug);
-                    show();
-                }));
-            }
-            body.scrollTop = 0;
-        };
-        window.addEventListener('popstate', show);
-        window.addEventListener('hashchange', show);
-        show();
+        listAndDetail({
+            label: 'portfolio', listClass: 'project-list', items: data.entries,
+            key: p => slug(p.tab),
+            row: (p, href) => `
+                <a class="proj" href="${href}">
+                    ${p.logo ? `<img src="${asset(p.logo)}" alt="">` : '<span></span>'}
+                    <span class="proj-text">
+                        <span class="proj-title">${p.title}</span>
+                        <span class="kicker">${p.subtitle}</span>
+                    </span>
+                </a>`,
+            detail: projectDetail,
+        });
     }
 
     // ═════════════ SLICES OF LIFE ═════════════
-    // URL keeps the state: #readings → tab, #readings/the-mark-of-zorro → that entry's page.
-
-    const coverImg = (it, cls = '') =>
-        `<img${cls ? ` class="${cls}"` : ''} src="${asset(it.image)}" alt="${attr(it.alt || it.title + ' cover')}" loading="lazy">`;
-
-    // --- trophy case: built from the log ---
-    function trophies(s) {
-        // Music: favorites first, then random songs (a new mix on every visit).
-        if (s.stack === 'cassette') {
-            const favs = s.log.filter(e => e.favorite);
-            const rest = s.log.filter(e => !e.favorite).sort(() => Math.random() - 0.5);
-            return [...favs, ...rest].slice(0, 3).map(e => ({ e, label: e.favorite ? 'Favorite' : '' }));
-        }
-        const logged = s.log.filter(e => !e.watchlist);
-        const picks = [];
-        const add = (e, label) => { if (e && !picks.some(p => p.e === e)) picks.push({ e, label }); };
-        logged.filter(e => e.current).forEach(e => add(e, 'Current'));
-        add(logged.find(e => !e.current), 'Latest');
-        s.log.filter(e => e.favorite).forEach(e => add(e, 'Favorite'));
-        s.log.filter(e => e.watchlist).forEach(e => add(e, 'On the watchlist'));
-        logged.forEach(e => picks.length < 3 && add(e, 'Recent'));
-        return picks.slice(0, 4);
-    }
-
-    function caseView(s) {
-        const sl = slug(s.tab);
-        const cards = trophies(s).map(({ e, label }) => `
-            <a class="trophy" href="#${sl}/${slug(e.title)}">
-                <div class="shelf-cover">${coverImg(e)}</div>
-                ${label ? `<span class="kicker">${label}</span>` : ''}
-                <h4>${e.title}</h4>
-            </a>`).join('');
-        return `
-            <div class="pane">
-                <div class="pane-head"><h3>${s.heading}</h3><img src="${asset(s.icon)}" alt=""></div>
-                ${s.memo ? `<div class="memo">${s.memo.map(p => `<p>${p}</p>`).join('')}</div>` : ''}
-                <div class="trophy-case${s.posters ? ' posters' : ''}${s.stack === 'cassette' ? ' albums' : ''}">${cards}</div>
-            </div>`;
-    }
-
-    function entryView(s, e) {
-        const status = e.current ? 'Current' : e.watchlist ? 'On the watchlist' : e.favorite ? 'Favorite' : '';
-        const meta = [status, e.date].filter(Boolean).join(' · ');
-        const site = e.link ? new URL(asset(e.link), location.href).hostname.replace(/^www\./, '') : '';
-        const review = e.review ? [].concat(e.review).map(p => `<p>${p}</p>`).join('') : '';
-        return `
-            <div class="pane entry${s.posters ? ' posters' : ''}">
-                <button class="back-btn">← ${s.heading}</button>
-                <div class="entry-body">
-                    <div class="entry-cover">${coverImg(e)}</div>
-                    <div class="entry-text">
-                        ${meta ? `<span class="kicker">${meta}</span>` : ''}
-                        <h3>${e.title}</h3>
-                        ${e.author ? `<span class="entry-author">${e.author}</span>` : ''}
-                        ${e.note ? `<p>${e.note}</p>` : ''}
-                        ${review}
-                        ${e.link ? `<p class="links-row"><a ${ext(e.link)} class="archive-link">view on ${site} ↗</a></p>` : ''}
-                    </div>
-                </div>
-            </div>`;
-    }
+    // URL keeps the state: #readings → tab, #readings/the-mark-of-zorro → that entry on the tab's set.
 
     // --- journal column: a pile of books / VHS tapes / DVD cases, newest on top ---
-    // Only the newest few sit on the pile; the full collection is on the shelf (#tab/_all).
+    // A pile holds STACK_MAX items; the rest go on further piles, flipped through with arrows.
 
-    const STACK_MAX = { books: 6, vhs: 8, dvd: 9, cassette: 9 };   // how many fit on the pile before the rest go on the shelf
+    const STACK_MAX = { books: 6, vhs: 8, dvd: 9, cassette: 9 };   // how many fit on one pile
     const SPINE_COLORS = ['#3d4b55', '#56483b', '#3f5a50', '#4a4152', '#5c5246', '#34424d', '#4d5a44', '#5a3f3f'];
     const DVD_COLORS = ['#2d4a6b', '#6b2d3a', '#2f5d4f', '#5b4a2a', '#4a2f5d', '#2a2a2e', '#7a5a2a', '#355a6b'];
     const LABEL_COLORS = ['#e9e1cf', '#e6dcc4', '#ece6d6', '#e3d9c0'];
     const hash = str => [...String(str || '')].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
 
-    // One item in the pile (flat) or on the shelf (upright). Same markup, CSS turns it.
+    // One item in the pile, lying flat.
     function stackItem(s, e, sl) {
         const h = hash(e.title);
         const href = `#${sl}/${slug(e.title)}`;
@@ -235,30 +254,18 @@
             </a>`;
     }
 
-    function journalView(s) {
-        const sl = slug(s.tab);
-        const logged = s.log;   // watchlist items sit on the pile too, marked unwatched
-        const max = STACK_MAX[s.stack] || STACK_MAX.books;
-        const pile = logged.slice(0, max).map(e => stackItem(s, e, sl)).join('');
-        const more = logged.length > max
-            ? `<a class="more-link" href="#${sl}/_all">${logged.length - max} more on the shelf →</a>`
-            : logged.length > 3 ? `<a class="more-link" href="#${sl}/_all">see the whole shelf →</a>` : '';
-        return `
-            <div class="journal-head eyebrow">${s.journal || 'journal'}<span>${logged.length}</span></div>
-            <div class="pile">${pile}</div>
-            ${more}`;
-    }
+    const pileCount = s => Math.max(1, Math.ceil(s.log.length / (STACK_MAX[s.stack] || STACK_MAX.books)));
+    const pileOf = (s, e) => Math.floor(s.log.indexOf(e) / (STACK_MAX[s.stack] || STACK_MAX.books));
 
-    // Stage view: the whole collection standing upright on shelves.
-    function shelfView(s) {
+    function journalView(s, page) {
         const sl = slug(s.tab);
-        const logged = s.log;
+        const max = STACK_MAX[s.stack] || STACK_MAX.books;
+        const piles = pileCount(s);
+        const pile = s.log.slice(page * max, page * max + max).map(e => stackItem(s, e, sl)).join('');
         return `
-            <div class="pane">
-                <button class="back-btn">← ${s.heading}</button>
-                <div class="pane-head"><h3>${s.journal || 'journal'}</h3><span class="eyebrow">${logged.length} on the shelf</span></div>
-                <div class="bookcase">${logged.map(e => `<div class="slot">${stackItem(s, e, sl)}</div>`).join('')}</div>
-            </div>`;
+            <div class="journal-head eyebrow">${s.journal || 'journal'}<span>${s.log.length}</span></div>
+            <div class="pile">${pile}</div>
+            ${pagerView(page, piles, 'stack')}`;
     }
 
     // --- music: Spotify lookups, the tape deck, and the player ---
@@ -293,12 +300,78 @@
     const BANDS = ['#b5533c', '#3f6f8a', '#558071', '#c19a3e', '#7a4f7a', '#9c4a3c'];
     const fmt = ms => { const t = Math.max(0, Math.round(ms / 1000)); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`; };
 
+    // --- set pieces: music's tape deck, film & tv's television, readings' book ---
+    // The tab's intro stays on top and the set sits below it. Picking something in the
+    // journal swaps only the .set-slot (see route); with nothing picked, a highlight is loaded.
+    const featured = s => s.log.find(e => e.current) || s.log.find(e => e.favorite) || s.log[0];
+
+    const setView = (s, cls, inner) => `
+            <div class="pane set-view ${cls}">
+                <div class="pane-head"><h3>${s.heading}</h3><img src="${asset(s.icon)}" alt=""></div>
+                ${s.memo ? `<div class="memo">${s.memo.map(p => `<p>${p}</p>`).join('')}</div>` : ''}
+                <div class="set-slot">${inner}</div>
+            </div>`;
+
+    // Text beside a set: status, title, author, note, link. Longer reviews go under the set.
+    function setSide(e, status) {
+        const meta = [status, e.date].filter(Boolean).join(' · ');
+        const site = e.link ? new URL(asset(e.link), location.href).hostname.replace(/^www\./, '') : '';
+        return `
+                    <div class="deck-side">
+                        <span class="kicker">${meta}</span>
+                        <h3>${e.title}</h3>
+                        ${e.author ? `<span class="entry-author">${e.author}</span>` : ''}
+                        ${e.note ? `<p>${e.note}</p>` : ''}
+                        ${e.link ? `<p class="links-row"><a ${ext(e.link)} class="archive-link">view on ${site} ↗</a></p>` : ''}
+                    </div>`;
+    }
+    const setReview = e => e.review
+        ? `<div class="set-review">${[].concat(e.review).map(p => `<p>${p}</p>`).join('')}</div>` : '';
+
+    function tvView(s, e) {
+        const status = e.current ? 'watching now' : e.watchlist ? 'on the watchlist' : e.favorite ? 'favorite' : 'now showing';
+        return setView(s, 'tv-view', `
+                <div class="tv-set">
+                    <div class="tv" aria-hidden="true">
+                        <div class="tv-antenna"></div>
+                        <div class="tv-body">
+                            <div class="tv-screen">
+                                <img class="tv-glow" src="${asset(e.image)}" alt="">
+                                <img class="tv-poster" src="${asset(e.image)}" alt="">
+                            </div>
+                            <div class="tv-panel"><span class="knob"></span><span class="knob"></span><span class="tv-grille"></span></div>
+                        </div>
+                        <div class="tv-legs"></div>
+                    </div>
+                    ${setSide(e, status)}
+                </div>
+                ${setReview(e)}`);
+    }
+
+    // Readings: the book pulled off the stack, a hardcover turned to show its pages.
+    // The one being read now has a bookmark ribbon hanging out.
+    function bookView(s, e) {
+        const status = e.current ? 'reading now' : e.watchlist ? 'on the reading list' : e.favorite ? 'favorite' : 'finished';
+        const h = hash(e.title);
+        return setView(s, 'book-view', `
+                <div class="book-set">
+                    <div class="book" aria-hidden="true" style="--back:${SPINE_COLORS[h % SPINE_COLORS.length]}">
+                        <div class="book-3d">
+                            <span class="book-back"></span>
+                            <span class="book-pages"></span>
+                            ${e.current ? '<span class="book-ribbon"></span>' : ''}
+                            <img class="book-cover" src="${asset(e.image)}" alt="">
+                        </div>
+                    </div>
+                    ${setSide(e, status)}
+                </div>
+                ${setReview(e)}`);
+    }
+
     function deckView(s, e) {
         const h = hash(e.title);
         const style = `--shell:${SHELLS[h % SHELLS.length]};--band:${BANDS[(h >>> 3) % BANDS.length]};--p:0`;
-        return `
-            <div class="pane deck-view">
-                <button class="back-btn">← ${s.heading}</button>
+        return setView(s, 'deck-view', `
                 <div class="deck" style="${style}">
                     <div class="cassette" aria-hidden="true">
                         <div class="cassette-label">
@@ -324,8 +397,7 @@
                         ${e.note ? `<p>${e.note}</p>` : ''}
                     </div>
                 </div>
-                <div class="deck-embed"><div class="spotify-slot"></div></div>
-            </div>`;
+                <div class="deck-embed"><div class="spotify-slot"></div></div>`);
     }
 
     // Spotify's embed API: lets our play button drive the official player and tells us
@@ -383,18 +455,13 @@
 
     const tripCount = n => `${n} trip${n === 1 ? '' : 's'}`;
 
-    function passportView(s) {
-        const sl = slug(s.tab);
-        return `
-            <div class="journal-head eyebrow">${s.journal || 'passport'}<span>${s.countries.length}</span></div>
-            <div class="passport">${s.countries.map(c => `
-                <a class="stamp" href="#${sl}/${slug(c.name)}" data-code="${c.code}">
+    // The passport sits under the globe: one stamp per country, paged to fit.
+    const passportRows = s => s.countries.map(c => `
+                <a class="stamp" href="#${slug(s.tab)}/${slug(c.name)}" data-code="${c.code}">
                     <span class="stamp-code">${c.code}</span>
                     <span class="stamp-name">${c.name}</span>
                     ${c.trips && c.trips.length ? `<span class="stamp-trips">${c.trips.length}</span>` : ''}
-                </a>`).join('')}
-            </div>`;
-    }
+                </a>`);
 
     function countryCard(c) {
         const trips = c.trips || [];
@@ -462,29 +529,53 @@
         body.innerHTML = data.entries.map(s => s.countries
             ? `<section class="tab-panel split travel" data-slug="${slug(s.tab)}" hidden>
                    <div class="stage">${travelStage(s)}</div>
-                   <aside class="journal globe-side"><div class="globe"></div></aside>
+                   <aside class="journal globe-side">
+                       <div class="globe"></div>
+                       <div class="passport-box">
+                           <div class="journal-head eyebrow">${s.journal || 'passport'}<span>${s.countries.length}</span></div>
+                           <div class="passport-host"></div>
+                       </div>
+                   </aside>
                </section>`
             : s.log
             ? `<section class="tab-panel split" data-slug="${slug(s.tab)}" hidden>
                    <div class="stage"></div>
-                   <aside class="journal">${s.log.some(e => e.spotify) ? '' : journalView(s)}</aside>
+                   <aside class="journal"></aside>
                </section>`
             : `<section class="tab-panel split kesem" data-slug="${slug(s.tab)}" hidden>${kesemPanel(s)}</section>`
         ).join('');
 
+        // Which pile each journal is showing; the arrows flip it, opening an entry jumps to its pile.
+        const piles = new Map();
+        const drawJournal = (s, page) => {
+            const panel = body.querySelector(`.tab-panel[data-slug="${slug(s.tab)}"]`);
+            const journal = panel.querySelector('.journal');
+            piles.set(s, Math.min(Math.max(page, 0), pileCount(s) - 1));
+            journal.innerHTML = journalView(s, piles.get(s));
+            onPager(journal, step => {
+                drawJournal(s, piles.get(s) + step);
+                markSelected(panel);
+            });
+        };
+        const markSelected = panel => {
+            const sel = panel.dataset.selected;
+            panel.querySelectorAll('.journal a').forEach(a => a.classList.toggle('selected', !!sel && a.getAttribute('href') === sel));
+        };
+
         // Music entries only have Spotify links until their titles/art are looked up.
         const ready = new Map(data.entries.map(s => [s, !s.log || !s.log.some(e => e.spotify)]));
+        data.entries.filter(s => s.log && ready.get(s)).forEach(s => drawJournal(s, 0));
         data.entries.filter(s => !ready.get(s)).forEach(s => {
             const panel = body.querySelector(`.tab-panel[data-slug="${slug(s.tab)}"]`);
             panel.querySelector('.journal').innerHTML = `<div class="journal-head eyebrow">${s.journal || 'journal'}</div><p class="loading">tuning in…</p>`;
             hydrateSpotify(s).then(() => {
                 ready.set(s, true);
-                panel.querySelector('.journal').innerHTML = journalView(s);
+                drawJournal(s, 0);
                 route();
             });
         });
 
-        let globe = null;
+        let globe = null, passport = null;
         const route = () => {
             stopPlayer();
             const [tabKey, entryKey] = decodeURIComponent(location.hash.slice(1)).split('/');
@@ -500,18 +591,29 @@
             } else if (s.log) {
                 const panel = body.querySelector(`.tab-panel[data-slug="${sl}"]`);
                 const stage = panel.querySelector('.stage');
-                const entry = entryKey && s.log.find(e => slug(e.title) === entryKey);
-                stage.innerHTML = entryKey === '_all' ? shelfView(s)
-                    : entry ? (s.stack === 'cassette' ? deckView(s, entry) : entryView(s, entry))
-                    : caseView(s);
-                if (entry && s.stack === 'cassette') mountPlayer(stage, entry);
-                stage.scrollTop = 0;
-                panel.querySelectorAll('.journal a').forEach(a =>
-                    a.classList.toggle('selected', !!entry && a.getAttribute('href') === `#${sl}/${entryKey}`));
-                const back = stage.querySelector('.back-btn');
-                if (back) back.addEventListener('click', () => { location.hash = sl; });
+                const picked = entryKey && s.log.find(e => slug(e.title) === entryKey);
+                const setPiece = s.stack === 'cassette' ? deckView : s.stack === 'books' ? bookView : tvView;
+                const entry = picked || featured(s);
+                const swap = !!(entry && stage.querySelector('.set-view'));
+                if (swap) {
+                    // Only the set changes: the intro stays put while the new tape / channel comes in.
+                    const next = document.createElement('div');
+                    next.innerHTML = setPiece(s, entry);
+                    const slot = next.querySelector('.set-slot');
+                    slot.classList.add('swap');
+                    stage.querySelector('.set-slot').replaceWith(slot);
+                } else {
+                    stage.innerHTML = entry ? setPiece(s, entry)
+                        : `<div class="pane"><div class="pane-head"><h3>${s.heading}</h3><img src="${asset(s.icon)}" alt=""></div></div>`;
+                }
+                if (s.stack === 'cassette' && entry) mountPlayer(stage, entry);
+                if (!swap) stage.scrollTop = 0;   // swapping keeps the visitor where they are
+                if (entry && pileOf(s, entry) !== piles.get(s)) drawJournal(s, pileOf(s, entry));
+                panel.dataset.selected = entry ? `#${sl}/${slug(entry.title)}` : '';
+                markSelected(panel);
                 // on phones the stage sits above the journal — bring the opened entry into view
-                if (entry && window.matchMedia('(max-width: 930px)').matches) stage.scrollIntoView({ behavior: 'smooth' });
+                if (picked && window.matchMedia('(max-width: 930px)').matches)
+                    (stage.querySelector('.set-slot') || stage).scrollIntoView({ behavior: 'smooth' });
             }
             if (s.countries) {
                 const panel = body.querySelector(`.tab-panel[data-slug="${sl}"]`);
@@ -523,16 +625,28 @@
                         if (c) location.hash = `${sl}/${slug(c.name)}`;
                     });
                 }
-                log.innerHTML = country ? countryCard(country) : passportView(s);
+                if (!passport) {
+                    const host = panel.querySelector('.passport-host');
+                    passport = fittedList({
+                        host,
+                        rows: passportRows(s),
+                        wrap: html => `<div class="passport">${html}</div>`,
+                        room: () => host.clientHeight,
+                        after: () => host.querySelectorAll('.stamp').forEach(a => {
+                            a.classList.toggle('selected', a.getAttribute('href') === location.hash);
+                            a.addEventListener('pointerenter', () => globe && globe.highlight(a.dataset.code));
+                            a.addEventListener('pointerleave', () => globe && globe.highlight(null));
+                        }),
+                    });
+                }
+                passport.show(country ? s.countries.indexOf(country) : -1);
+                log.innerHTML = country ? countryCard(country)
+                    : `<p class="travel-hint">pick a country on the globe or in the passport to see its trips →</p>`;
                 panel.querySelector('.travel-stage').classList.toggle('open', !!country);   // card takes the whole left side
                 panel.querySelector('.stage').scrollTop = 0;
                 if (globe) { globe.select(country ? country.code : null); globe.highlight(null); }
                 const back = log.querySelector('.back-btn');
                 if (back) back.addEventListener('click', () => { location.hash = sl; });
-                log.querySelectorAll('.stamp').forEach(a => {
-                    a.addEventListener('pointerenter', () => globe && globe.highlight(a.dataset.code));
-                    a.addEventListener('pointerleave', () => globe && globe.highlight(null));
-                });
                 if (country && window.matchMedia('(max-width: 930px)').matches) log.scrollIntoView({ behavior: 'smooth' });
             }
         };
