@@ -72,11 +72,12 @@ window.PAGE_DATA = {
                     code: 'ES', name: 'Spain',
                     trips: [
                         {
-                            label: 'Next', title: 'Sevilla to Porto', date: '',
+                            label: 'Awesome', title: 'Sevilla to Porto', date: '',
                             image: 'images/icon/sol/tl/spain.png', alt: 'spain logo',
-                            note: `Last Spring Break was a bit calm in Sacramento.
-                                   I'm making a trip out this time around to see south Spain
-                                   and a bit of Portugal!`,
+                            note: `The Spring Break prior was a bit calm in Sacramento.
+                                   A week in Sevilla really does it. Please contact me for any leads
+                                   on the sweet <a href="https://vinumplaysevilla.com/2025/05/26/vino-naranja-de-sevilla-un-tesoro-unico-para-descubrir-y-maridar/">
+                                   vino de naranja</a> they had there.`,
                         },
                     ],
                 },
@@ -131,10 +132,17 @@ window.PAGE_DATA = {
             // Newest first — add new books at the TOP.
             log: [
                 {
-                    title: 'The Count of Monte Cristo', author: 'Alexandre Dumas', current: true, date: '',
+                    title: 'Lust for Life', author: 'Irving Stone', date: '',
+                    image: 'images/icon/sol/rd/lfl.jpg',
+                    link: 'https://www.goodreads.com/book/show/79834.Lust_for_Life',
+                    note: `I started with Stone's account on Michelangelo. His writing has a power to feel as if his characters are on of your good friends by the end. This one on Van Vogh has been just as vivid so far`,
+                },
+                {
+                    title: 'The Count of Monte Cristo', author: 'Alexandre Dumas',  date: '',
                     image: 'images/icon/sol/rd/count.jpg',
                     link: 'https://www.gutenberg.org/ebooks/1184',
-                    note: `A hefty book, but a classic is a classic. I'm enjoying the pace and story!`,
+                    note: `A hefty book, but a classic is a classic. I thoroughly enjoyed the read and could feel
+                           the importance of it.`,
                 },
                 {
                     title: 'The Mark of Zorro', author: 'Johnston McCulley', date: '',
@@ -236,18 +244,16 @@ window.PAGE_DATA = {
             stack: 'cassette',
             // Paste a Spotify song link (Share → Copy Song Link). Title and album art are
             // looked up automatically; artist is optional (Spotify doesn't share it with web pages).
-            // Newest first, like the other tabs. Add note: `...` to say something about a song.
+            // Newest first, like the other tabs. Add note: `...` to say something about a song.w
             log: [
-                { spotify: 'https://open.spotify.com/track/2aaCNg42RA74s0EmHTBqS7', artist: 'Mac DeMarco' },
-                { spotify: 'https://open.spotify.com/track/3B3eOgLJSqPEA0RfboIQVM', artist: 'Bon Iver' },
-                { spotify: 'https://open.spotify.com/track/74jYpz3ZVG1ThkBtsoUwG1', artist: 'Pinegrove' },
-                { spotify: 'https://open.spotify.com/track/6Ehg6hFp7O2qUF3njy7dAj', artist: 'Kishi Bashi' },
-                { spotify: 'https://open.spotify.com/track/0B1zVsLqmV9ibIFdNS5tGs', artist: 'Todd Rundgren' },
-                { spotify: 'https://open.spotify.com/track/16Eou1I5su9dxDKCYAVkmH', artist: '54 Ultra' },
-                { spotify: 'https://open.spotify.com/track/6eoS1aU0NqUpHCGAGMn7Fn', artist: 'Íñigo Quintero' },
-                { spotify: 'https://open.spotify.com/track/2BPmAFsiy6vwDceybqIAjw', artist: 'Los Enanitos Verdes' },
-                { spotify: 'https://open.spotify.com/track/6pD0ufEQq0xdHSsRbg9LBK', artist: 'Grupo Frontera, Bad Bunny' },
-                { spotify: 'https://open.spotify.com/track/6JZMrxEDFKNQouzJwpwaoN', artist: 'Alcione' },
+                { spotify: 'https://open.spotify.com/track/1Cwsd5xI8CajJz795oy4XF?si=a63fc3ea1f1947d9', artist: 'New Radicals'},
+                { spotify: 'https://open.spotify.com/track/1GILf5ettT0oOnxnjsLIAn?si=b2084fe9d5b1426a', artist: 'Frank Mastra'},
+                { spotify: 'https://open.spotify.com/track/0B1zVsLqmV9ibIFdNS5tGs?si=910ba1fcad1b41a7', artist: 'Todd Rundgren'},
+                { spotify: 'https://open.spotify.com/track/2ibiJCDgb0N53RXRtYsDtg?si=0f61250288e6407f', artist: 'Christopher Cross'},
+                { spotify: 'https://open.spotify.com/track/2XwjJPenyna7YyCzURSNLh?si=beff1c325bdc4b40', artist: 'Luke Tyler Shelton'},
+                { spotify: 'https://open.spotify.com/track/6DW27qxq1wwOXnUidkp383?si=1f30c6583b404f80', artist: 'Asher Kartman'},
+                { spotify: 'https://open.spotify.com/track/6Pur3hWy6Nzc27ilmsp5HA?si=63f270818b964bcf', artist: 'Los Enanitos Verdes'},
+                { spotify: 'https://open.spotify.com/track/0HU6iAeBwxODFxkiRMTgF1?si=c5289a9de3604af2', artist: 'Juanpalitoschinos'},
             ],
         },
         {
